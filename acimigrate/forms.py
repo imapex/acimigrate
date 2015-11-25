@@ -12,12 +12,12 @@ logger.info('Loading Forms')
 #     epg2 = SelectField('EPG2')
 
 class ConfigureForm(Form):
-    apic_hostname = StringField('hostname')
-    apic_username = StringField('username')
-    apic_password = PasswordField('password')
-    nexus_hostname = StringField('hostname')
-    nexus_username = StringField('username')
-    nexus_password = PasswordField('username')
+    apic_hostname = StringField('Hostname')
+    apic_username = StringField('Username')
+    apic_password = PasswordField('Password')
+    nexus_hostname = StringField('Hostname')
+    nexus_username = StringField('Username')
+    nexus_password = PasswordField('Password')
 
 class MigrationForm(Form):
     tenant_name = StringField('tenant')
