@@ -1,0 +1,23 @@
+{% extends "base_layout.html" %}
+{% block content %}
+    <form action="/doconfigure" method="POST">
+
+    <h2>APIC Login Information</h2>
+    {{ form.csrf_token }}
+    {{ form.apic_hostname.label }} {{ form.apic_hostname(size=20) }}<br>
+    {{ form.apic_username.label }} {{ form.apic_username(size=20) }}<br>
+    {{ form.apic_password.label }} {{ form.apic_password(size=20) }}<br>
+    <br>
+    <h2>Nexus Login Information</h2>
+    {{ form.nexus_hostname.label }} {{ form.nexus_hostname(size=20) }}<br>
+    {{ form.nexus_username.label }} {{ form.nexus_username(size=20) }}<br>
+    {{ form.nexus_password.label }} {{ form.nexus_password(size=20) }}<br>
+
+
+       <br><button type="submit" class="btn btn-primary btn-lg">Submit</button>
+
+      </ul>
+    </div>
+
+{% endblock %}
+

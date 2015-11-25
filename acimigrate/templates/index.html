@@ -1,0 +1,36 @@
+{% extends "base_layout.html" %}
+{% block content %}
+
+<h1>The following Vlans are present on the Nexus Device</h1>
+  <table border="2" style="width:100%">
+        <tr>
+            <th>VLAN</th>
+            <th>Name</th>
+            <th>HSRP MAC</th>
+            <th>HSRP VIP</th>
+        </tr>
+        {% for n in data.keys() %}
+            <tr>
+                <td>{{n}}</td>
+                <td>{{data[n]['name']}}</td>
+                <td>{{data[n]['hsrp']['vmac']}}</td>
+                <td>
+                    {% for vip in data[n]['hsrp']['vips'] %}
+                    {{vip}}<br>
+                    {% endfor %}
+                    </td>
+            </tr>
+         {% endfor %}
+  </table>
+      <br>
+       <form action="/migrate" method="POST">
+            {{ form.csrf_token }}
+                {{ form.tenant_name.label }} {{ form.tenant_name(size=20) }}<br>
+                {{ form.app_name.label }} {{ form.app_name(size=20) }}<br>
+                {{ form.layer3.label }} {{ form.layer3(size=20) }}<br>
+            <br><button type="submit" class="btn btn-primary btn-lg">Migrate</button>
+
+        </form>
+
+
+{% endblock %}
