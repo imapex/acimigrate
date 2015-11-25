@@ -2,8 +2,6 @@
 import xml.etree.ElementTree as ET
 from ncclient import manager
 import acitoolkit.acitoolkit as aci
-import xmltodict
-
 
 class APIC(object):
     """

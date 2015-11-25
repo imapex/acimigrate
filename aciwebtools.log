@@ -470,3 +470,15 @@
 2015-11-24 19:13:07,872 - acimigrate.forms - INFO - Loading Forms
 2015-11-24 19:13:07,981 - acimigrate.tasks - INFO - Loading Tasks
 2015-11-24 19:13:07,981 - acimigrate.views - INFO - Loading Views
+2015-11-24 20:10:14,126 - acimigrate - CRITICAL - *************************
+2015-11-24 20:10:14,126 - acimigrate - CRITICAL - acimigrate is starting
+2015-11-24 20:10:14,126 - acimigrate - CRITICAL - *************************
+2015-11-24 20:10:14,138 - acimigrate.forms - INFO - Loading Forms
+2015-11-24 20:10:14,410 - acimigrate.tasks - INFO - Loading Tasks
+2015-11-24 20:10:14,411 - acimigrate.views - INFO - Loading Views
+2015-11-24 20:10:14,578 - acimigrate - CRITICAL - *************************
+2015-11-24 20:10:14,578 - acimigrate - CRITICAL - acimigrate is starting
+2015-11-24 20:10:14,578 - acimigrate - CRITICAL - *************************
+2015-11-24 20:10:14,584 - acimigrate.forms - INFO - Loading Forms
+2015-11-24 20:10:14,700 - acimigrate.tasks - INFO - Loading Tasks
+2015-11-24 20:10:14,700 - acimigrate.views - INFO - Loading Views
