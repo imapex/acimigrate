@@ -594,3 +594,29 @@
 2015-12-17 14:17:47,746 - acimigrate.tasks - INFO - Layer 3 migration for VLAN0123 vlan completed
 2015-12-17 14:17:47,810 - acimigrate.tasks - INFO - Created EPG for vlan VLAN0999
 2015-12-17 14:17:47,865 - acimigrate.tasks - INFO - Created EPG for vlan n1k-l3
+2015-12-17 14:20:50,805 - acimigrate - CRITICAL - *************************
+2015-12-17 14:20:50,805 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 14:20:50,805 - acimigrate - CRITICAL - *************************
+2015-12-17 14:20:50,851 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 14:20:50,921 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 14:20:50,921 - acimigrate.views - INFO - Loading Views
+2015-12-17 14:20:55,983 - acimigrate - CRITICAL - *************************
+2015-12-17 14:20:55,983 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 14:20:55,983 - acimigrate - CRITICAL - *************************
+2015-12-17 14:20:56,036 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 14:20:56,103 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 14:20:56,104 - acimigrate.views - INFO - Loading Views
+2015-12-17 14:21:08,902 - acimigrate - CRITICAL - *************************
+2015-12-17 14:21:08,902 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 14:21:08,902 - acimigrate - CRITICAL - *************************
+2015-12-17 14:21:08,955 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 14:21:09,024 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 14:21:09,024 - acimigrate.views - INFO - Loading Views
+2015-12-17 14:21:31,224 - acimigrate.tasks - INFO - Created EPG for vlan default
+2015-12-17 14:21:31,271 - acimigrate.tasks - INFO - Created EPG for vlan 1k-vtep
+2015-12-17 14:21:31,292 - acimigrate.tasks - INFO - Layer 3 migration for 1k-vtep vlan completed
+2015-12-17 14:21:31,329 - acimigrate.tasks - INFO - Created EPG for vlan VLAN0123
+2015-12-17 14:21:31,360 - acimigrate.tasks - INFO - Layer 3 migration for VLAN0123 vlan completed
+2015-12-17 14:21:31,385 - acimigrate.tasks - INFO - Layer 3 migration for VLAN0123 vlan completed
+2015-12-17 14:21:31,439 - acimigrate.tasks - INFO - Created EPG for vlan VLAN0999
+2015-12-17 14:21:31,504 - acimigrate.tasks - INFO - Created EPG for vlan n1k-l3

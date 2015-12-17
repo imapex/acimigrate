@@ -281,16 +281,14 @@ class Nexus(object):
                         rows = sec.getchildren()
                         for row in rows:
                             #print row.attrib
-                            subnetx = row.find('groups:subnet1', svi_ns_map)
+                            subnetx = row.find('groups:subnet' + str(count), svi_ns_map)
                             if subnetx is not None:
                                 subnetx = subnetx.text
                                 subnet_list.append(subnetx)
-                            maskx = row.find('groups:masklen1', svi_ns_map)
+                            maskx = row.find('groups:masklen' + str(count), svi_ns_map)
                             if maskx is not None:
                                 maskx = maskx.text
                                 mask_list.append(maskx)
-
-                #TODO: Get secondary IP addresses and masks
 
                 svi_dict[intf] = {'subnets' : subnet_list, 'masks' : mask_list}
         #print "svi_dict: " , svi_dict
