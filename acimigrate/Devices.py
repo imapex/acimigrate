@@ -32,7 +32,7 @@ class APIC(object):
         infraRsVlanNs = cobra.model.infra.RsVlanNs(physDomP, tDn=u'uni/infra/vlanns-[{}-pool]-static'.format(domain_name))
         raise NotImplemented
 
-    def migration_tenant(self, tenant_name, app_name):
+    def migration_tenant(self, tenant_name, app_name, provision=True):
         self.tenant = aci.Tenant(tenant_name)
         self.app = aci.AppProfile(app_name, self.tenant)
         self.context = aci.Context('default', self.tenant)
@@ -43,7 +43,10 @@ class APIC(object):
                                  arpOpc='unspecified',
                                  etherT='unspecified',
                                  parent=self.contract)
-        self.session.push_to_apic(self.tenant.get_url(), self.tenant.get_json())
+        if provision:
+            self.session.push_to_apic(self.tenant.get_url(), self.tenant.get_json())
+        else:
+            self.tenant.get_json()
         return self.tenant
 
     def add_physdom(self, epg):
@@ -52,7 +55,7 @@ class APIC(object):
                                                   "status":"created"}}}
         return attach_dom
 
-    def create_epg_for_vlan(self, vlan, mac_address=None, net=None):
+    def create_epg_for_vlan(self, vlan, mac_address=None, net=None, provision=True):
         epg = aci.EPG(vlan, self.app)
         bd = aci.BridgeDomain(vlan, self.tenant)
 
@@ -72,9 +75,10 @@ class APIC(object):
         epg.add_bd(bd)
         epg.provide(self.contract)
         epg.consume(self.contract)
-
-        resp = self.session.push_to_apic(self.tenant.get_url(), self.tenant.get_json())
-
+        if provision:
+            resp = self.session.push_to_apic(self.tenant.get_url(), self.tenant.get_json())
+        else:
+            print self.tenant.get_json()
 
         # TODO: attach domain to EPG
         # TODO: add static path binding
@@ -243,6 +247,37 @@ class Nexus(object):
         return vlan_dict
 
     @property
+    def svi_dict(self):
+        query = '''
+            <show>
+              <ip>
+                <interface/>
+            </show>
+        '''
+
+        ncdata = str(self.manager.get(('subtree', query)))
+        root = ET.fromstring(ncdata)
+        svi_ns_map = {'groups': 'http://www.cisco.com/nxos:1.0:ip'}
+        svi_dict = {}
+
+        for c in root.iter():
+            svi_intfs = (c.findall('groups:ROW_intf', svi_ns_map))
+            for i in svi_intfs:
+                subnet_list = []
+                mask_list = []
+                intf = i.find('groups:intf-name', svi_ns_map).text
+                subnet = i.find('groups:subnet', svi_ns_map).text
+                subnet_list.append(subnet)
+                mask = i.find('groups:masklen', svi_ns_map).text
+                mask_list.append(mask)
+                #TODO: Get secondary IP addresses and masks
+
+                svi_dict[intf] = {'subnets' : subnet_list, 'masks' : mask_list}
+        #print "svi_dict: " , svi_dict
+        return svi_dict
+
+
+    @property
     def hsrp_dict(self):
         query = '''
                   <show>
@@ -323,12 +358,15 @@ class Nexus(object):
 
         """
         migrate_dict = {}
+        #print self.svi_dict.values()
         for v in self.vlan_dict.keys():
             migrate_dict[v] = {'name': self.vlan_dict[v]}
             if 'Vlan{0}'.format(v) in self.hsrp_dict.keys():
                 migrate_dict[v]['hsrp'] = self.hsrp_dict['Vlan{0}'.format(v)]
+                migrate_dict[v]['hsrp'].update(self.svi_dict['Vlan{0}'.format(v)])
             else:
                 migrate_dict[v]['hsrp'] = None
+        #print migrate_dict
         return migrate_dict
 
     def cdp_neighbors(self):
