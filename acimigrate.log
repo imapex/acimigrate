@@ -308,3 +308,289 @@
 2015-12-17 10:38:49,763 - acimigrate.tasks - INFO - Layer 3 migration for VLAN0123 vlan completed
 2015-12-17 10:38:49,822 - acimigrate.tasks - INFO - Created EPG for vlan VLAN0999
 2015-12-17 10:38:49,879 - acimigrate.tasks - INFO - Created EPG for vlan n1k-l3
+2015-12-17 11:59:34,420 - acimigrate - CRITICAL - *************************
+2015-12-17 11:59:34,420 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 11:59:34,420 - acimigrate - CRITICAL - *************************
+2015-12-17 11:59:34,461 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 11:59:34,653 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 11:59:34,653 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:00:05,742 - acimigrate.tasks - INFO - Created EPG for vlan default
+2015-12-17 12:00:05,907 - acimigrate.tasks - INFO - Created EPG for vlan 1k-vtep
+2015-12-17 12:00:05,944 - acimigrate.tasks - INFO - Layer 3 migration for 1k-vtep vlan completed
+2015-12-17 12:00:06,009 - acimigrate.tasks - INFO - Created EPG for vlan VLAN0123
+2015-12-17 12:00:06,054 - acimigrate.tasks - INFO - Layer 3 migration for VLAN0123 vlan completed
+2015-12-17 12:00:24,545 - acimigrate - CRITICAL - *************************
+2015-12-17 12:00:24,545 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:00:24,545 - acimigrate - CRITICAL - *************************
+2015-12-17 12:00:24,553 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:00:24,655 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:00:24,655 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:00:43,431 - acimigrate.tasks - INFO - Created EPG for vlan default
+2015-12-17 12:00:43,541 - acimigrate.tasks - INFO - Created EPG for vlan 1k-vtep
+2015-12-17 12:00:43,574 - acimigrate.tasks - INFO - Layer 3 migration for 1k-vtep vlan completed
+2015-12-17 12:00:43,648 - acimigrate.tasks - INFO - Created EPG for vlan VLAN0123
+2015-12-17 12:00:43,675 - acimigrate.tasks - INFO - Layer 3 migration for VLAN0123 vlan completed
+2015-12-17 12:15:16,799 - acimigrate - CRITICAL - *************************
+2015-12-17 12:15:16,799 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:15:16,799 - acimigrate - CRITICAL - *************************
+2015-12-17 12:15:16,805 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:15:16,897 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:15:16,897 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:16:17,870 - acimigrate - CRITICAL - *************************
+2015-12-17 12:16:17,870 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:16:17,870 - acimigrate - CRITICAL - *************************
+2015-12-17 12:16:17,877 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:16:17,963 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:16:17,963 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:17:58,720 - acimigrate - CRITICAL - *************************
+2015-12-17 12:17:58,720 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:17:58,720 - acimigrate - CRITICAL - *************************
+2015-12-17 12:17:58,726 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:17:58,816 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:17:58,816 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:19:12,736 - acimigrate - CRITICAL - *************************
+2015-12-17 12:19:12,736 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:19:12,736 - acimigrate - CRITICAL - *************************
+2015-12-17 12:19:12,743 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:19:12,830 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:19:12,830 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:19:30,695 - acimigrate.tasks - INFO - Created EPG for vlan default
+2015-12-17 12:19:30,847 - acimigrate.tasks - INFO - Created EPG for vlan 1k-vtep
+2015-12-17 12:19:30,884 - acimigrate.tasks - INFO - Layer 3 migration for 1k-vtep vlan completed
+2015-12-17 12:19:30,946 - acimigrate.tasks - INFO - Created EPG for vlan VLAN0123
+2015-12-17 12:19:31,007 - acimigrate.tasks - INFO - Layer 3 migration for VLAN0123 vlan completed
+2015-12-17 12:20:06,827 - acimigrate - CRITICAL - *************************
+2015-12-17 12:20:06,827 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:20:06,827 - acimigrate - CRITICAL - *************************
+2015-12-17 12:20:06,834 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:20:06,926 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:20:06,926 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:20:27,530 - acimigrate.tasks - INFO - Created EPG for vlan default
+2015-12-17 12:20:27,562 - acimigrate.tasks - INFO - Created EPG for vlan 1k-vtep
+2015-12-17 12:20:27,611 - acimigrate.tasks - INFO - Layer 3 migration for 1k-vtep vlan completed
+2015-12-17 12:20:27,632 - acimigrate.tasks - INFO - Created EPG for vlan VLAN0123
+2015-12-17 12:20:27,682 - acimigrate.tasks - INFO - Layer 3 migration for VLAN0123 vlan completed
+2015-12-17 12:21:18,787 - acimigrate - CRITICAL - *************************
+2015-12-17 12:21:18,787 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:21:18,787 - acimigrate - CRITICAL - *************************
+2015-12-17 12:21:18,797 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:21:18,891 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:21:18,891 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:24:16,486 - acimigrate - CRITICAL - *************************
+2015-12-17 12:24:16,486 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:24:16,486 - acimigrate - CRITICAL - *************************
+2015-12-17 12:24:16,494 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:24:16,585 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:24:16,585 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:25:06,024 - acimigrate - CRITICAL - *************************
+2015-12-17 12:25:06,024 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:25:06,024 - acimigrate - CRITICAL - *************************
+2015-12-17 12:25:06,033 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:25:06,128 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:25:06,128 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:25:58,096 - acimigrate - CRITICAL - *************************
+2015-12-17 12:25:58,096 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:25:58,097 - acimigrate - CRITICAL - *************************
+2015-12-17 12:25:58,104 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:25:58,187 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:25:58,187 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:27:38,345 - acimigrate - CRITICAL - *************************
+2015-12-17 12:27:38,345 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:27:38,345 - acimigrate - CRITICAL - *************************
+2015-12-17 12:27:38,355 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:27:38,438 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:27:38,439 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:28:40,081 - acimigrate - CRITICAL - *************************
+2015-12-17 12:28:40,081 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:28:40,081 - acimigrate - CRITICAL - *************************
+2015-12-17 12:28:40,088 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:28:40,179 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:28:40,179 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:31:03,708 - acimigrate - CRITICAL - *************************
+2015-12-17 12:31:03,708 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:31:03,708 - acimigrate - CRITICAL - *************************
+2015-12-17 12:31:03,715 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:31:03,805 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:31:03,806 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:32:17,968 - acimigrate - CRITICAL - *************************
+2015-12-17 12:32:17,968 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:32:17,968 - acimigrate - CRITICAL - *************************
+2015-12-17 12:32:17,975 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:32:18,059 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:32:18,059 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:33:58,906 - acimigrate - CRITICAL - *************************
+2015-12-17 12:33:58,906 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:33:58,906 - acimigrate - CRITICAL - *************************
+2015-12-17 12:33:58,914 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:33:58,998 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:33:58,998 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:35:51,724 - acimigrate - CRITICAL - *************************
+2015-12-17 12:35:51,724 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:35:51,724 - acimigrate - CRITICAL - *************************
+2015-12-17 12:35:51,730 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:35:51,818 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:35:51,819 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:39:16,477 - acimigrate - CRITICAL - *************************
+2015-12-17 12:39:16,477 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:39:16,477 - acimigrate - CRITICAL - *************************
+2015-12-17 12:39:16,485 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:39:16,567 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:39:16,567 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:39:46,463 - acimigrate - CRITICAL - *************************
+2015-12-17 12:39:46,463 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:39:46,463 - acimigrate - CRITICAL - *************************
+2015-12-17 12:39:46,470 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:39:46,553 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:39:46,553 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:40:36,587 - acimigrate - CRITICAL - *************************
+2015-12-17 12:40:36,587 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:40:36,587 - acimigrate - CRITICAL - *************************
+2015-12-17 12:40:36,596 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:40:36,685 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:40:36,685 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:43:31,351 - acimigrate - CRITICAL - *************************
+2015-12-17 12:43:31,351 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:43:31,351 - acimigrate - CRITICAL - *************************
+2015-12-17 12:43:31,357 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:43:31,437 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:43:31,437 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:45:29,966 - acimigrate - CRITICAL - *************************
+2015-12-17 12:45:29,966 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:45:29,966 - acimigrate - CRITICAL - *************************
+2015-12-17 12:45:29,974 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:45:30,063 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:45:30,063 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:50:09,584 - acimigrate - CRITICAL - *************************
+2015-12-17 12:50:09,585 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:50:09,585 - acimigrate - CRITICAL - *************************
+2015-12-17 12:50:09,657 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:50:09,740 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:50:09,740 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:52:07,585 - acimigrate - CRITICAL - *************************
+2015-12-17 12:52:07,586 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:52:07,586 - acimigrate - CRITICAL - *************************
+2015-12-17 12:52:07,629 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:52:07,701 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:52:07,701 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:52:46,490 - acimigrate - CRITICAL - *************************
+2015-12-17 12:52:46,491 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:52:46,491 - acimigrate - CRITICAL - *************************
+2015-12-17 12:52:46,543 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:52:46,613 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:52:46,614 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:52:54,667 - acimigrate - CRITICAL - *************************
+2015-12-17 12:52:54,667 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:52:54,667 - acimigrate - CRITICAL - *************************
+2015-12-17 12:52:54,716 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:52:54,790 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:52:54,791 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:53:00,604 - acimigrate - CRITICAL - *************************
+2015-12-17 12:53:00,604 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:53:00,604 - acimigrate - CRITICAL - *************************
+2015-12-17 12:53:00,650 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:53:00,715 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:53:00,715 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:53:10,188 - acimigrate - CRITICAL - *************************
+2015-12-17 12:53:10,189 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:53:10,189 - acimigrate - CRITICAL - *************************
+2015-12-17 12:53:10,239 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:53:10,303 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:53:10,303 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:53:11,643 - acimigrate - CRITICAL - *************************
+2015-12-17 12:53:11,643 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:53:11,643 - acimigrate - CRITICAL - *************************
+2015-12-17 12:53:11,690 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:53:11,750 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:53:11,750 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:53:20,353 - acimigrate - CRITICAL - *************************
+2015-12-17 12:53:20,353 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:53:20,353 - acimigrate - CRITICAL - *************************
+2015-12-17 12:53:20,402 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:53:20,480 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:53:20,480 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:55:41,207 - acimigrate - CRITICAL - *************************
+2015-12-17 12:55:41,207 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:55:41,208 - acimigrate - CRITICAL - *************************
+2015-12-17 12:55:41,420 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:55:41,620 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:55:41,620 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:55:50,860 - acimigrate - CRITICAL - *************************
+2015-12-17 12:55:50,861 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:55:50,862 - acimigrate - CRITICAL - *************************
+2015-12-17 12:55:51,092 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:55:51,302 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:55:51,302 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:56:01,037 - acimigrate - CRITICAL - *************************
+2015-12-17 12:56:01,037 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:56:01,038 - acimigrate - CRITICAL - *************************
+2015-12-17 12:56:01,248 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:56:01,443 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:56:01,443 - acimigrate.views - INFO - Loading Views
+2015-12-17 12:56:30,776 - acimigrate - CRITICAL - *************************
+2015-12-17 12:56:30,777 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 12:56:30,779 - acimigrate - CRITICAL - *************************
+2015-12-17 12:56:31,011 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 12:56:31,223 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 12:56:31,223 - acimigrate.views - INFO - Loading Views
+2015-12-17 13:03:22,934 - acimigrate - CRITICAL - *************************
+2015-12-17 13:03:22,934 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 13:03:22,935 - acimigrate - CRITICAL - *************************
+2015-12-17 13:03:23,137 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 13:03:23,347 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 13:03:23,347 - acimigrate.views - INFO - Loading Views
+2015-12-17 13:04:28,975 - acimigrate - CRITICAL - *************************
+2015-12-17 13:04:28,975 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 13:04:28,975 - acimigrate - CRITICAL - *************************
+2015-12-17 13:04:29,183 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 13:04:29,383 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 13:04:29,383 - acimigrate.views - INFO - Loading Views
+2015-12-17 13:07:17,220 - acimigrate - CRITICAL - *************************
+2015-12-17 13:07:17,221 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 13:07:17,221 - acimigrate - CRITICAL - *************************
+2015-12-17 13:07:17,435 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 13:07:17,639 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 13:07:17,639 - acimigrate.views - INFO - Loading Views
+2015-12-17 13:07:47,503 - acimigrate - CRITICAL - *************************
+2015-12-17 13:07:47,504 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 13:07:47,504 - acimigrate - CRITICAL - *************************
+2015-12-17 13:07:47,704 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 13:07:47,890 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 13:07:47,891 - acimigrate.views - INFO - Loading Views
+2015-12-17 13:08:53,101 - acimigrate - CRITICAL - *************************
+2015-12-17 13:08:53,101 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 13:08:53,102 - acimigrate - CRITICAL - *************************
+2015-12-17 13:08:53,302 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 13:08:53,503 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 13:08:53,503 - acimigrate.views - INFO - Loading Views
+2015-12-17 14:10:15,773 - acimigrate - CRITICAL - *************************
+2015-12-17 14:10:15,773 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 14:10:15,774 - acimigrate - CRITICAL - *************************
+2015-12-17 14:10:15,987 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 14:10:16,202 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 14:10:16,203 - acimigrate.views - INFO - Loading Views
+2015-12-17 14:11:34,939 - acimigrate - CRITICAL - *************************
+2015-12-17 14:11:34,940 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 14:11:34,940 - acimigrate - CRITICAL - *************************
+2015-12-17 14:11:35,147 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 14:11:35,367 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 14:11:35,367 - acimigrate.views - INFO - Loading Views
+2015-12-17 14:15:03,995 - acimigrate - CRITICAL - *************************
+2015-12-17 14:15:03,996 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 14:15:03,996 - acimigrate - CRITICAL - *************************
+2015-12-17 14:15:04,196 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 14:15:04,399 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 14:15:04,399 - acimigrate.views - INFO - Loading Views
+2015-12-17 14:17:28,425 - acimigrate - CRITICAL - *************************
+2015-12-17 14:17:28,425 - acimigrate - CRITICAL - acimigrate is starting
+2015-12-17 14:17:28,425 - acimigrate - CRITICAL - *************************
+2015-12-17 14:17:28,477 - acimigrate.forms - INFO - Loading Forms
+2015-12-17 14:17:28,551 - acimigrate.tasks - INFO - Loading Tasks
+2015-12-17 14:17:28,551 - acimigrate.views - INFO - Loading Views
+2015-12-17 14:17:47,489 - acimigrate.tasks - INFO - Created EPG for vlan default
+2015-12-17 14:17:47,600 - acimigrate.tasks - INFO - Created EPG for vlan 1k-vtep
+2015-12-17 14:17:47,622 - acimigrate.tasks - INFO - Layer 3 migration for 1k-vtep vlan completed
+2015-12-17 14:17:47,681 - acimigrate.tasks - INFO - Created EPG for vlan VLAN0123
+2015-12-17 14:17:47,725 - acimigrate.tasks - INFO - Layer 3 migration for VLAN0123 vlan completed
+2015-12-17 14:17:47,746 - acimigrate.tasks - INFO - Layer 3 migration for VLAN0123 vlan completed
+2015-12-17 14:17:47,810 - acimigrate.tasks - INFO - Created EPG for vlan VLAN0999
+2015-12-17 14:17:47,865 - acimigrate.tasks - INFO - Created EPG for vlan n1k-l3
