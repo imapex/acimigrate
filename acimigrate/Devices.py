@@ -266,7 +266,7 @@ class Nexus(object):
                 mac = i.find('groups:sh_vmac', hsrp_ns_map).text
 
                 # Check for secondary HSRP addresses
-                secondaries = c.find('groups:TABLE_grp_vip_sec', hsrp_ns_map)
+                secondaries = i.find('groups:TABLE_grp_vip_sec', hsrp_ns_map)
                 if secondaries is not None:
                     for sec in secondaries.iter():
                         ips = sec.findall('groups:sh_vip_sec', hsrp_ns_map)
