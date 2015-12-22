@@ -28,6 +28,31 @@
                 {{ form.tenant_name.label }} {{ form.tenant_name(size=20) }}<br>
                 {{ form.app_name.label }} {{ form.app_name(size=20) }}<br>
                 {{ form.layer3.label }} {{ form.layer3(size=20) }}<br>
+                <h2>Nexus 1</h2>
+                <select name="n1i1">
+                    {% for interface in n1interfaces %}
+                        <option value = "{{ interface }}">{{ interface }}</option>
+                    {% endfor %}
+                </select>
+                <select name=n1i2">
+                    {% for interface in n1interfaces %}
+                        <option value = "{{ interface }}">{{ interface }}</option>
+                    {% endfor %}
+                </select>
+                    {{ form.n1pc.label }} {{ form.n1pc(size=4) }}<br>
+               <h2>Nexus 2</h2>
+                    <select name="n2i1">
+                        {% for interface in n2interfaces %}
+                            <option value = "{{ interface }}">{{ interface }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name=n2i2">
+                        {% for interface in n2interfaces %}
+                            <option value = "{{ interface }}">{{ interface }}</option>
+                        {% endfor %}
+                    </select>
+                        {{ form.n2pc.label }} {{ form.n2pc(size=4) }}<br>
+
             <br><button type="submit" class="btn btn-primary btn-lg">Migrate</button>
 
         </form>

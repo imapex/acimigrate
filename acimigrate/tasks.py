@@ -5,7 +5,8 @@ logger = logging.getLogger(__name__)
 
 logger.info('Loading Tasks')
 def migrate(nx, apic, auto=True, layer3=False):
-    migration_dict = nx.migration_dict()
+    full_migration_dict = nx.migration_dict()
+    migration_dict = full_migration_dict['vlans']
     print "********"
     print migration_dict
     print "********"

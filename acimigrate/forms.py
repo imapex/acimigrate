@@ -18,8 +18,13 @@ class ConfigureForm(Form):
     nexus_hostname = StringField('Hostname')
     nexus_username = StringField('Username')
     nexus_password = PasswordField('Password')
+    nexus2_hostname = StringField('Hostname')
+    nexus2_username = StringField('Username')
+    nexus2_password = PasswordField('Password')
 
 class MigrationForm(Form):
     tenant_name = StringField('tenant')
     app_name = StringField('app')
     layer3 = BooleanField('layer3')
+    n1pc = StringField('n1pc')
+    n2pc = StringField('n2pc')
