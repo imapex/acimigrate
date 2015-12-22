@@ -50,10 +50,15 @@ def updateconfig():
     args['nexus_username'] = request.form['nexus_username']
     args['nexus_password'] = request.form['nexus_password']
 
+    args['nexus2_hostname'] = request.form['nexus2_hostname']
+    args['nexus2_username'] = request.form['nexus2_username']
+    args['nexus2_password'] = request.form['nexus2_password']
+
     nexus = Nexus(args['nexus_hostname'], args['nexus_username'], args['nexus_password'])
+    nexus2 = Nexus(args['nexus2_hostname'], args['nexus2_username'], args['nexus2_password'])
     apic = APIC(args['apic_url'], args['apic_username'], args['apic_password'])
     configured = True
-    return render_template('index.html', data=nexus.migration_dict(), form=form)
+    return render_template('index.html', data=nexus.migration_dict()['vlans'], form=form, n1interfaces=nexus.free_interfaces(), n2interfaces=nexus2.free_interfaces())
 
 
 @app.route("/migrate", methods=('GET','POST'))
@@ -66,6 +71,8 @@ def domigrate():
         l3 = False
     TENANT_NAME = request.form['tenant_name']
     APP_NAME = request.form['app_name']
+    n1pc = request.form['n1pc']
+    n2pc = request.form['n2pc']
     apic.migration_tenant(TENANT_NAME, APP_NAME)
     result = migrate(nexus, apic, auto=True, layer3=l3)
     return render_template('completed.html', data=result)

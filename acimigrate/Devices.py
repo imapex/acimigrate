@@ -225,6 +225,60 @@ class Nexus(object):
                                                 mac[12:14])
 
     @property
+    def port_channel_dict(self):
+        query = '''
+            <show>
+                <port-channel>
+                    <summary/>
+                </port-channel>
+            </show>
+            '''
+        ncdata = str(self.manager.get(('subtree', query)))
+        root = ET.fromstring(ncdata)
+        pc_ns_map = {'groups': 'http://www.cisco.com/nxos:1.0:eth_pcm_dc3'}
+        pc_dict = {}
+
+        for c in root.iter():
+            pcs = (c.findall('groups:ROW_channel', pc_ns_map))
+            for pc in pcs:
+                portchannel = pc.find('groups:group', pc_ns_map).text
+                member_list = []
+                for row in pc:
+                    ints = row.findall('groups:ROW_member', pc_ns_map)
+                    for int in ints:
+                        interface = int.find('groups:port', pc_ns_map).text
+                        member_list.append(interface)
+                pc_dict[portchannel] = member_list
+
+        return pc_dict
+
+
+
+    @property
+    def phy_interface_dict(self):
+        query = '''
+            <show>
+                <interface>
+                    <status/>
+                </interface>
+            </show>
+        '''
+
+        ncdata = str(self.manager.get(('subtree', query)))
+        root = ET.fromstring(ncdata)
+        int_ns_map = {'groups': 'http://www.cisco.com/nxos:1.0:if_manager'}
+        int_list = []
+
+        for c in root.iter():
+            ints = (c.findall('groups:ROW_interface', int_ns_map))
+            for int in ints:
+                interface = int.find('groups:interface', int_ns_map).text
+                if interface.startswith("Ethernet"):
+                    int_list.append(interface)
+
+        return int_list
+
+    @property
     def vlan_dict(self):
         query = '''
               <show>
@@ -376,16 +430,36 @@ class Nexus(object):
 
         """
         migrate_dict = {}
-        #print self.svi_dict.values()
+        migrate_dict['vlans'] = {}
         for v in self.vlan_dict.keys():
-            migrate_dict[v] = {'name': self.vlan_dict[v]}
+            migrate_dict['vlans'][v] = {'name': self.vlan_dict[v]}
             if 'Vlan{0}'.format(v) in self.hsrp_dict.keys():
-                migrate_dict[v]['hsrp'] = self.hsrp_dict['Vlan{0}'.format(v)]
-                migrate_dict[v]['hsrp'].update(self.svi_dict['Vlan{0}'.format(v)])
+                migrate_dict['vlans'][v]['hsrp'] = self.hsrp_dict['Vlan{0}'.format(v)]
+                migrate_dict['vlans'][v]['hsrp'].update(self.svi_dict['Vlan{0}'.format(v)])
             else:
-                migrate_dict[v]['hsrp'] = None
-        #print migrate_dict
+                migrate_dict['vlans'][v]['hsrp'] = None
+        #migrate_dict['interfaces'] = self.free_interfaces()
+        #print self.port_channel_dict
+        #print self.free_interfaces()
         return migrate_dict
+
+
+    def free_interfaces(self):
+        """
+        Removes interfaces that are currently in use by existing port-channels
+        :return:
+        """
+        used_int_list = []
+        for pc in self.port_channel_dict:
+            for int in self.port_channel_dict[pc]:
+                used_int_list.append(int)
+
+        print used_int_list
+
+        free_int_list = [x for x in self.phy_interface_dict if x not in used_int_list]
+        #free_int_list = set(self.phy_interface_dict) - set(used_int_list)
+        print free_int_list
+        return free_int_list
 
     def cdp_neighbors(self):
         query = self.build_xml('show cdp neighbor')
