@@ -14,6 +14,7 @@ configured = False
 
 apic = None
 nexus = None
+nexus2 = None
 
 @app.route("/setup", methods=('GET', 'POST'))
 def setup():
@@ -38,7 +39,7 @@ def index():
 
 @app.route("/doconfigure", methods=('GET', 'POST'))
 def updateconfig():
-    global apic, nexus
+    global apic, nexus, nexus2
     form = MigrationForm()
     args = {}
     args['apic_hostname'] = request.form['apic_hostname']
@@ -58,12 +59,13 @@ def updateconfig():
     nexus2 = Nexus(args['nexus2_hostname'], args['nexus2_username'], args['nexus2_password'])
     apic = APIC(args['apic_url'], args['apic_username'], args['apic_password'])
     configured = True
-    return render_template('index.html', data=nexus.migration_dict()['vlans'], form=form, n1interfaces=nexus.free_interfaces(), n2interfaces=nexus2.free_interfaces())
+    return render_template('index.html', data=nexus.migration_dict()['vlans'], form=form,
+                           n1interfaces=nexus.free_interfaces(), n2interfaces=nexus2.free_interfaces())
 
 
 @app.route("/migrate", methods=('GET','POST'))
 def domigrate():
-    global nexus, apic
+    global nexus, apic, nexus2
     print request.form
     if 'layer3' in request.form:
         l3 = True
@@ -71,10 +73,20 @@ def domigrate():
         l3 = False
     TENANT_NAME = request.form['tenant_name']
     APP_NAME = request.form['app_name']
-    n1pc = request.form['n1pc']
-    n2pc = request.form['n2pc']
+
+    n1i1 = request.form['n1i1']
+    n1i2 = request.form['n1i2']
+    n1_int_list = [n1i1, n1i2]
+
+
+    n2i1 = request.form['n2i1']
+    n2i2 = request.form['n2i2']
+    n2_int_list = [n2i1, n2i2]
+
+    #TODO - remove repetes from n1_int_list and n2_int_list
+
     apic.migration_tenant(TENANT_NAME, APP_NAME)
-    result = migrate(nexus, apic, auto=True, layer3=l3)
+    result = migrate(nexus, apic, nexus2, auto=True, layer3=l3, n1_int_list=n1_int_list, n2_int_list=n2_int_list)
     return render_template('completed.html', data=result)
 
 

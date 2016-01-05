@@ -2,6 +2,8 @@
 import xml.etree.ElementTree as ET
 from ncclient import manager
 import acitoolkit.acitoolkit as aci
+import requests
+import json
 
 class APIC(object):
     """
@@ -249,9 +251,30 @@ class Nexus(object):
                         interface = int.find('groups:port', pc_ns_map).text
                         member_list.append(interface)
                 pc_dict[portchannel] = member_list
-
+        print pc_dict
         return pc_dict
 
+    @property
+    def vpc_dict(self):
+        query = '''
+            <show>
+                <vpc/>
+            </show>
+            '''
+        ncdata = str(self.manager.get(('subtree', query)))
+        root = ET.fromstring(ncdata)
+        vpc_ns_map = {'groups': 'http://www.cisco.com/nxos:1.0:mcecm'}
+        vpc_dict = {}
+        vpc_id_list = []
+
+        for c in root.iter():
+            vpcs = (c.findall('groups:ROW_vpc', vpc_ns_map))
+            for vpc in vpcs:
+                vpc_id = vpc.find('groups:vpc-id', vpc_ns_map).text
+                vpc_id_list.append(vpc_id)
+        vpc_dict["vpc_list"] = vpc_id_list
+        print vpc_dict
+        return vpc_dict
 
 
     @property
@@ -443,6 +466,12 @@ class Nexus(object):
         #print self.free_interfaces()
         return migrate_dict
 
+    def pc_list(self):
+
+        pc_list = []
+        for pc in self.port_channel_dict.keys():
+            pc_list.append(pc)
+        return pc_list
 
     def free_interfaces(self):
         """
@@ -458,7 +487,7 @@ class Nexus(object):
 
         free_int_list = [x for x in self.phy_interface_dict if x not in used_int_list]
         #free_int_list = set(self.phy_interface_dict) - set(used_int_list)
-        print free_int_list
+        #print free_int_list
         return free_int_list
 
     def cdp_neighbors(self):
@@ -479,3 +508,62 @@ class Nexus(object):
                                    'platform': platform,
                                    }
         return neighbors
+
+    def config_phy_connection(self, interfaces, pc):
+        """
+        Expects a list of interfaces and port channel number
+        with matching unused numbers
+        :param interfaces:
+        :return:
+        """
+
+
+        myheaders={'content-type':'application/json'}
+        url = "http://" + self.host + "/ins"
+
+        for interface in interfaces:
+            #TODO
+            #Execute the following using XMLAPI
+            #interface interface
+                #switchport
+                #switchport mode trunk
+                #channel-group pc mode active
+            payload={
+              "ins_api": {
+                "version": "1.0",
+                "type": "cli_conf",
+                "chunk": "0",
+                "sid": "1",
+                "input": "default int " + interface + " ; "
+                         "int " + interface + " ; description acimigrate ; "
+                         "switchport ; "
+                         "switchport mode trunk ; "
+                         "channel-group " + pc + " mode active",
+                "output_format": "json"
+              }
+            }
+            print payload
+            response = requests.post(url,data=json.dumps(payload), headers=myheaders,auth=(self.user,self.passwd)).json()
+            print response
+        #TODO
+        #Execute the following using XMLAPI
+        #interface port-channel pc
+            #vpc pc
+        payload={
+          "ins_api": {
+            "version": "1.0",
+            "type": "cli_conf",
+            "chunk": "0",
+            "sid": "1",
+            "input": "interface port-channel " + pc + " ; description acimigrate ; vpc " + pc,
+            "output_format": "json"
+          }
+        }
+        print payload
+        response = requests.post(url,data=json.dumps(payload), headers=myheaders,auth=(self.user,self.passwd)).json()
+        print response
+        #TODO
+        #Check responses if valid
+
+        status = True
+        return status
