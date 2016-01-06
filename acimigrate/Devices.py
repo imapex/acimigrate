@@ -4,6 +4,7 @@ from ncclient import manager
 import acitoolkit.acitoolkit as aci
 import requests
 import json
+#from nxosNCRPC import *
 
 class APIC(object):
     """
@@ -110,6 +111,37 @@ class Nexus(object):
                                        allow_agent=False,
                                        look_for_keys=False)
 
+
+
+    cmd_default_int_snippet = """
+        <default>
+            <interface>
+                <__XML__value>%s</__XML__value>
+            </interface>
+          </default>
+          """
+
+    cmd_config_pc_trunk = """
+            <interface>
+              <__XML__value>%s</__XML__value>
+            </interface>
+              <description>
+                  <__XML__value>testcall</__XML__value>
+              </description>
+              <__XML__value>switchport mode trunk</__XML__value>
+              <__XML__value>channel-group %s mode active</__XML__value>
+        """
+
+    cmd_config_vpc_member = """
+        <interface>
+            <__XML__value>port-channel%s</__XML__value>
+        </interface>
+            <vpc>
+                <__XML__value>%s</__XML__value>
+            </vpc>
+        """
+
+
     exec_conf_prefix = """
       <config xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0">
         <configure xmlns="http://www.cisco.com/nxos:1.0:vlan_mgr_cli">
@@ -211,6 +243,7 @@ class Nexus(object):
               <brief/>
             </vlan>
           </show> """
+
 
     @staticmethod
     def format_mac_address(mac):
@@ -407,6 +440,8 @@ class Nexus(object):
                                    'vips': vip_list}
         return hsrp_dict
 
+
+
     def enable_vlan(self, vlanid, vlanname):
         confstr = self.cmd_vlan_conf_snippet % (vlanid, vlanname)
         confstr = self.exec_conf_prefix + confstr + self.exec_conf_postfix
@@ -433,6 +468,8 @@ class Nexus(object):
         confstr = self.cmd_no_vlan_int_snippet % (interface, vlanid)
         print confstr
         self.manager.edit_config(target='running', config=confstr)
+
+
 
     def build_xml(self, cmd):
         args = cmd.split(' ')
@@ -516,54 +553,20 @@ class Nexus(object):
         :param interfaces:
         :return:
         """
-
-
-        myheaders={'content-type':'application/json'}
-        url = "http://" + self.host + "/ins"
-
         for interface in interfaces:
-            #TODO
-            #Execute the following using XMLAPI
-            #interface interface
-                #switchport
-                #switchport mode trunk
-                #channel-group pc mode active
-            payload={
-              "ins_api": {
-                "version": "1.0",
-                "type": "cli_conf",
-                "chunk": "0",
-                "sid": "1",
-                "input": "default int " + interface + " ; "
-                         "int " + interface + " ; description acimigrate ; "
-                         "switchport ; "
-                         "switchport mode trunk ; "
-                         "channel-group " + pc + " mode active",
-                "output_format": "json"
-              }
-            }
-            print payload
-            response = requests.post(url,data=json.dumps(payload), headers=myheaders,auth=(self.user,self.passwd)).json()
-            print response
-        #TODO
-        #Execute the following using XMLAPI
-        #interface port-channel pc
-            #vpc pc
-        payload={
-          "ins_api": {
-            "version": "1.0",
-            "type": "cli_conf",
-            "chunk": "0",
-            "sid": "1",
-            "input": "interface port-channel " + pc + " ; description acimigrate ; vpc " + pc,
-            "output_format": "json"
-          }
-        }
-        print payload
-        response = requests.post(url,data=json.dumps(payload), headers=myheaders,auth=(self.user,self.passwd)).json()
-        print response
-        #TODO
-        #Check responses if valid
+            default = self.cmd_default_int_snippet % interface
+            port_config = self.cmd_config_pc_trunk % (interface, pc)
+
+            confstr = default + port_config
+            confstr = self.exec_conf_prefix + confstr + self.exec_conf_postfix
+            #print confstr
+            self.manager.edit_config(target='running', config=confstr)
+
+
+        confstr = self.cmd_config_vpc_member % (pc, pc)
+        confstr = self.exec_conf_prefix + confstr + self.exec_conf_postfix
+        self.manager.edit_config(target='running', config=confstr)
+
 
         status = True
         return status

@@ -41,8 +41,6 @@ def migrate(nx, apic, nx2, auto=True, layer3=False, n1_int_list=None, n2_int_lis
                             mask = str(hsrp['masks'][count])
                         else:
                             mask = "24"
-                            #TODO: Add some better failure logic
-                            #TODO: once multiple IP and VIP logic added, need to find proper subnet mask in list
                         tenant = apic.create_epg_for_vlan(name,
                                                           mac_address=hsrp['vmac'],
                                                           net=vip+'/'+mask)
