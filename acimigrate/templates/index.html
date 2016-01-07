@@ -28,6 +28,8 @@
                 {{ form.tenant_name.label }} {{ form.tenant_name(size=20) }}<br>
                 {{ form.app_name.label }} {{ form.app_name(size=20) }}<br>
                 {{ form.layer3.label }} {{ form.layer3(size=20) }}<br>
+
+           <h1>Select the interfaces used between the ACI Fabric and Nexus switches</h1>
                 <h2>Nexus 1</h2>
                 <select name="n1i1">
                     {% for interface in n1interfaces %}
@@ -51,6 +53,20 @@
                         {% endfor %}
                     </select>
 
+                <br>
+                {% for switch in aci_switch_list %}
+                    <h2>{{ switch }}</h2>
+                    <select>
+                    {% for interface in aci_switch_list[switch] %}
+                        <option value="{{interface}}">{{interface}}</option>
+                    {% endfor %}
+                    </select>
+                    <select>
+                    {% for interface in aci_switch_list[switch] %}
+                        <option value="{{interface}}">{{interface}}</option>
+                    {% endfor %}
+                    </select>
+                {% endfor %}
             <br><button type="submit" class="btn btn-primary btn-lg">Migrate</button>
 
         </form>

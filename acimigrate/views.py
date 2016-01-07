@@ -59,8 +59,23 @@ def updateconfig():
     nexus2 = Nexus(args['nexus2_hostname'], args['nexus2_username'], args['nexus2_password'])
     apic = APIC(args['apic_url'], args['apic_username'], args['apic_password'])
     configured = True
+
+
+    #TODO - move below to a function somewhere else
+    aci_switch_dict = {}
+    aci_switches = apic.list_switches()
+    for aci_switch in aci_switches:
+        if aci_switch.role == 'leaf':
+            switch_int_list = apic.get_switch_interfaces(aci_switch.node)
+            int_list = []
+            for int in switch_int_list:
+                int_list.append(int.attributes['id'])
+            aci_switch_dict[aci_switch.name] = int_list
+
+    #print aci_switch_dict
     return render_template('index.html', data=nexus.migration_dict()['vlans'], form=form,
-                           n1interfaces=nexus.free_interfaces(), n2interfaces=nexus2.free_interfaces())
+                           n1interfaces=nexus.free_interfaces(), n2interfaces=nexus2.free_interfaces(),
+                           aci_switch_list=aci_switch_dict)
 
 
 @app.route("/migrate", methods=('GET','POST'))
@@ -88,5 +103,3 @@ def domigrate():
     apic.migration_tenant(TENANT_NAME, APP_NAME)
     result = migrate(nexus, apic, nexus2, auto=True, layer3=l3, n1_int_list=n1_int_list, n2_int_list=n2_int_list)
     return render_template('completed.html', data=result)
-
-

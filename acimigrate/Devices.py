@@ -2,9 +2,8 @@
 import xml.etree.ElementTree as ET
 from ncclient import manager
 import acitoolkit.acitoolkit as aci
-import requests
-import json
-#from nxosNCRPC import *
+from acitoolkit import Node
+
 
 class APIC(object):
     """
@@ -22,6 +21,7 @@ class APIC(object):
         self.physdom = None
         self.context = None
         self.contract = None
+        self.fabric_interfaces = aci.Interface.get(self.session)
 
     def migration_vlan_pool(self, vlan=None):
         topMo = cobra.model.infra("")
@@ -86,6 +86,22 @@ class APIC(object):
         # TODO: attach domain to EPG
         # TODO: add static path binding
         return resp
+
+    def list_switches(self):
+        phy_class = (Node)
+        switches = phy_class.get(self.session)
+        return switches
+
+    # def get_fabric_interfaces(self):
+    #     interfaces = aci.Interface.get(self.session)
+    #     return interfaces
+
+    def get_switch_interfaces(self, node):
+        int_list = []
+        for int in self.fabric_interfaces:
+            if int.node == node:
+                int_list.append(int)
+        return int_list
 
 
 class Nexus(object):
@@ -284,7 +300,7 @@ class Nexus(object):
                         interface = int.find('groups:port', pc_ns_map).text
                         member_list.append(interface)
                 pc_dict[portchannel] = member_list
-        print pc_dict
+        #print pc_dict
         return pc_dict
 
     @property
@@ -520,7 +536,7 @@ class Nexus(object):
             for int in self.port_channel_dict[pc]:
                 used_int_list.append(int)
 
-        print used_int_list
+        #print used_int_list
 
         free_int_list = [x for x in self.phy_interface_dict if x not in used_int_list]
         #free_int_list = set(self.phy_interface_dict) - set(used_int_list)

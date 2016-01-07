@@ -53,3 +53,5 @@ def migrate(nx, apic, nx2, auto=True, layer3=False, n1_int_list=None, n2_int_lis
     nx2.config_phy_connection(n2_int_list, str(nx2pc))
     result['nx2pc'] = nx2pc
     return result
+
+#def build_switch_int_list()
