@@ -4,3 +4,12 @@ ACI policies where VLAN = EPG = BD
 For L3 migration, HSRP must be configured.  acimigrate will handle a single HSRP group per SVI, however secondary HSRP addresses are supported.
 
 NOTE:  this is for development purposes to be used as a starting point.
+
+
+Assumptions
+
+* VPC aggregation topology
+Requirements
+
+* NX-OS device w/ XML API enabled
+* LACP enabled

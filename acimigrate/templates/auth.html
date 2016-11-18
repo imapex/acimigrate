@@ -4,18 +4,66 @@
 
     <h2>APIC Login Information</h2>
     {{ form.csrf_token }}
-    {{ form.apic_hostname.label }} {{ form.apic_hostname(size=20) }}<br>
-    {{ form.apic_username.label }} {{ form.apic_username(size=20) }}<br>
-    {{ form.apic_password.label }} {{ form.apic_password(size=20) }}<br>
+
+     <div class="form-group row">
+            <label class="col-sm-2 col-form-label">APIC Hostname Name</label>
+            <div class="col-sm-10">
+                {{form.apic_hostname(class_="form-control", placeholder="apic.company.com")}}
+            </div>
+     </div>
+     <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Username</label>
+        <div class="col-sm-10">
+            {{form.apic_username(class_="form-control", placeholder="admin")}}
+        </div>
+     </div>
+     <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-10">
+                {{form.apic_password(class_="form-control", placeholder="***")}}
+            </div>
+        </div>
+
     <br>
     <h2>Nexus 1 Login Information</h2>
-    {{ form.nexus_hostname.label }} {{ form.nexus_hostname(size=20) }}<br>
-    {{ form.nexus_username.label }} {{ form.nexus_username(size=20) }}<br>
-    {{ form.nexus_password.label }} {{ form.nexus_password(size=20) }}<br>
+
+         <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Primary Nexus Hostname/IP</label>
+            <div class="col-sm-10">
+                {{form.nexus_hostname(class_="form-control", placeholder="n7k1.company.com")}}
+            </div>
+        </div>
+         <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Username</label>
+            <div class="col-sm-10">
+                {{form.nexus_username(class_="form-control", placeholder="admin")}}
+            </div>
+        </div>
+         <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-10">
+                {{form.nexus_password(class_="form-control", placeholder="***")}}
+            </div>
+        </div>
     <h2>Nexus 2 Login Information</h2>
-    {{ form.nexus2_hostname.label }} {{ form.nexus2_hostname(size=20) }}<br>
-    {{ form.nexus2_username.label }} {{ form.nexus2_username(size=20) }}<br>
-    {{ form.nexus2_password.label }} {{ form.nexus2_password(size=20) }}<br>
+         <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Secondary Nexus Hostname/IP</label>
+            <div class="col-sm-10">
+                {{form.nexus2_hostname(class_="form-control", placeholder="admin")}}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Username</label>
+            <div class="col-sm-10">
+                {{form.nexus2_username(class_="form-control", placeholder="admin")}}
+            </div>
+        </div>
+         <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-10">
+                {{form.nexus2_password(class_="form-control", placeholder="***")}}
+            </div>
+        </div>
 
        <br><button type="submit" class="btn btn-primary btn-lg">Submit</button>
 
