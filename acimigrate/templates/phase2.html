@@ -1,0 +1,83 @@
+{% extends "base_layout.html" %}
+{% block content %}
+
+<h1>The following Vlans are present on the Nexus Device</h1>
+<div class="table-responsive">
+    <table class="table-striped"border="2" style="width:100%">
+        <thead>
+        <tr>
+            <th>VLAN</th>
+            <th>Name</th>
+            <th>HSRP MAC</th>
+            <th>HSRP VIP</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for n in data.keys() %}
+        <tr>
+            <td>{{n}}</td>
+            <td>{{data[n]['name']}}</td>
+            <td>{{data[n]['hsrp']['vmac']}}</td>
+            <td>
+                {% for vip in data[n]['hsrp']['vips'] %}
+                {{vip}}<br>
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<br>
+
+
+<form action="/migrate" method="POST">
+    {{ form.csrf_token }}
+    {{ form.tenant_name.label }} {{ form.tenant_name(size=20) }}<br>
+    {{ form.app_name.label }} {{ form.app_name(size=20) }}<br>
+    {{ form.layer3.label }} {{ form.layer3(size=20) }}<br>
+
+    <h1>Select the interfaces used between the ACI Fabric and Nexus switches</h1>
+    <h2>Nexus 1</h2>
+    <select name="n1i1">
+        {% for interface in n1interfaces %}
+        <option value = "{{ interface }}">{{ interface }}</option>
+        {% endfor %}
+    </select>
+    <select name="n1i2">
+        {% for interface in n1interfaces %}
+        <option value = "{{ interface }}">{{ interface }}</option>
+        {% endfor %}
+    </select>
+    <h2>Nexus 2</h2>
+    <select name="n2i1">
+        {% for interface in n2interfaces %}
+        <option value = "{{ interface }}">{{ interface }}</option>
+        {% endfor %}
+    </select>
+    <select name="n2i2">
+        {% for interface in n2interfaces %}
+        <option value = "{{ interface }}">{{ interface }}</option>
+        {% endfor %}
+    </select>
+
+    <br>
+    {% for switch in aci_switch_list %}
+    <h2>{{ switch }}</h2>
+    <select>
+        {% for interface in aci_switch_list[switch] %}
+        <option value="{{interface}}">{{interface}}</option>
+        {% endfor %}
+    </select>
+    <select>
+        {% for interface in aci_switch_list[switch] %}
+        <option value="{{interface}}">{{interface}}</option>
+        {% endfor %}
+    </select>
+    {% endfor %}
+    <br><button type="submit" class="btn btn-primary btn-lg">Migrate</button>
+
+</form>
+
+
+{% endblock %}

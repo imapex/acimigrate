@@ -1,0 +1,110 @@
+{% extends "base_layout.html" %}
+{% block content %}
+{{ form.csrf_token }}
+
+<!--<div id="migration-wizard">-->
+    <form id="migration-wizard" action="/doconfigure" method="POST">
+    <h3>Introduction</h3>
+    <section>
+        Welcome to the ACI migration wizard, in the following pages you will configure connectivity details for performing the migration
+    </section>
+    <h3>Primary Nexus Connectivity Info</h3>
+        <section>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Primary Nexus Hostname/IP</label>
+                <div class="col-sm-10">
+                    {{form.nexus_hostname(class_="form-control", placeholder="n7k1.company.com")}}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Username</label>
+                <div class="col-sm-10">
+                    {{form.nexus_username(class_="form-control", placeholder="admin")}}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-10">
+                    {{form.nexus_password(class_="form-control", placeholder="***")}}
+                </div>
+            </div>
+        </section>
+
+        <h3>Secondary Nexus Connectivity Info</h3>
+        <section>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Secondary Nexus Hostname/IP</label>
+                <div class="col-sm-10">
+                    {{form.nexus2_hostname(class_="form-control", placeholder="n7k2.company.com")}}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Username</label>
+                <div class="col-sm-10">
+                    {{form.nexus2_username(class_="form-control", placeholder="admin")}}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-10">
+                    {{form.nexus2_password(class_="form-control", placeholder="***")}}
+                </div>
+            </div>
+
+
+        </section>
+        <h3>APIC Connecitivity</h3>
+        <section>
+
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">APIC Hostname Name</label>
+                <div class="col-sm-10">
+                    {{form.apic_hostname(class_="form-control", placeholder="apic1.company.com")}}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Username</label>
+                <div class="col-sm-10">
+                    {{form.apic_username(class_="form-control", placeholder="admin")}}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-10">
+                    {{form.apic_password(class_="form-control", placeholder="***")}}
+                </div>
+            </div>
+        </section>
+
+    </form>
+</div>
+
+<script>
+    $("#migration-wizard").steps({
+        headerTag: "h3",
+        bodyTag: "section",
+        transitionEffect: "slideLeft",
+        stepsOrientation: "vertical",
+        onFinished: function (event, currentIndex)
+        {
+            var form = $(this);
+
+            // Submit form input
+            form.submit();
+        }
+    }).validate({
+        errorPlacement: function (error, element)
+        {
+            element.before(error);
+        },
+        rules: {
+            confirm: {
+                equalTo: "#password"
+            }
+        }
+    });
+
+</script>
+{% endblock %}

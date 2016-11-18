@@ -19,7 +19,7 @@ nexus2 = None
 @app.route("/setup", methods=('GET', 'POST'))
 def setup():
     form = ConfigureForm()
-    return render_template('auth.html', form=form)
+    return render_template('phase1.html', form=form)
 
 
 def configuration_required(f):
@@ -35,7 +35,8 @@ def configuration_required(f):
 @app.route("/", methods=['GET', 'POST'])
 @configuration_required
 def index():
-    return render_template('index.html')
+    return render_template('phase1.html')
+
 
 @app.route("/doconfigure", methods=('GET', 'POST'))
 def updateconfig():
@@ -73,7 +74,7 @@ def updateconfig():
             aci_switch_dict[aci_switch.name] = int_list
 
     #print aci_switch_dict
-    return render_template('index.html', data=nexus.migration_dict()['vlans'], form=form,
+    return render_template('phase2.html', data=nexus.migration_dict()['vlans'], form=form,
                            n1interfaces=nexus.free_interfaces(), n2interfaces=nexus2.free_interfaces(),
                            aci_switch_list=aci_switch_dict)
 
