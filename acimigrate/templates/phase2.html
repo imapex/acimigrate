@@ -1,83 +1,227 @@
 {% extends "base_layout.html" %}
 {% block content %}
+{{ form.csrf_token }}
 
-<h1>The following Vlans are present on the Nexus Device</h1>
-<div class="table-responsive">
-    <table class="table-striped"border="2" style="width:100%">
-        <thead>
-        <tr>
-            <th>VLAN</th>
-            <th>Name</th>
-            <th>HSRP MAC</th>
-            <th>HSRP VIP</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for n in data.keys() %}
-        <tr>
-            <td>{{n}}</td>
-            <td>{{data[n]['name']}}</td>
-            <td>{{data[n]['hsrp']['vmac']}}</td>
-            <td>
-                {% for vip in data[n]['hsrp']['vips'] %}
-                {{vip}}<br>
+
+
+<form id="migration-wizard-phase2" action="/migrate" method="POST">
+    <h3>Review VLAN Configuration</h3>
+
+    <section>
+        <h2>The following Vlans will be configured in ACI</h2>
+
+        <div class="table-responsive">
+            <table class="table-striped"border="2" style="width:100%">
+                <thead>
+                <tr>
+                    <th>VLAN</th>
+                    <th>Name</th>
+                    <th>HSRP MAC</th>
+                    <th>HSRP VIP</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for n in data.keys() %}
+                <tr>
+                    <td>{{n}}</td>
+                    <td>{{data[n]['name']}}</td>
+                    <td>{{data[n]['hsrp']['vmac']}}</td>
+                    <td>
+                        {% for vip in data[n]['hsrp']['vips'] %}
+                        {{vip}}<br>
+                        {% endfor %}
+                    </td>
+                </tr>
                 {% endfor %}
-            </td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
-<br>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <h3>ACI Logical Configuration</h3>
+    <section>
+        <h4>Please specify the tenant and application name which these vlans should be created in</h4>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">ACI Tenant</label>
+            <div class="col-sm-10">
+                {{form.tenant_name(class_="form-control", placeholder="***")}}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">App Name</label>
+            <div class="col-sm-10">
+                {{form.app_name(class_="form-control", placeholder="***")}}
+            </div>
+        </div>
+    </section>
+    <h3>Layer 3 Migration</h3>
+    <section>
+        <h4>Please check the following box if you would like to migrated the default gateways to the ACI fabric</h4>
+        <b>NOTE:</b>This can be disruptive if your L3 out configuration is not in place
+        <div class="col-sm-10">
+            {{form.layer3(class_="form-control")}}
+        </div>
+    </section>
+
+    <h3>Primary Nexus Physical Interfaces</h3>
+    <section>
+        <h2>Select the interfaces used between the ACI Fabric and Nexus switches</h2>
+
+        <label for="n1i1">Select First Interface</label>
+        <select id="n1i1" name="n1i1" class="form-control">
+            {% for interface in n1interfaces %}
+            <option>{{ interface }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="n1i2">Select Second Interface</label>
+        <select id="n1i2" name="n1i2" class="form-control">
+            {% for interface in n1interfaces %}
+            <option>{{ interface }}</option>
+            {% endfor %}
+        </select>
+
+    </section>
+
+    <h3>Secondary Nexus Physical Interfaces</h3>
+    <section>
+        <h2>Select the interfaces used between the ACI Fabric and Nexus switches</h2>
+
+        <label for="n2i1">Select First Interface</label>
+        <select id="n2i1" name="n2i1" class="form-control">
+            {% for interface in n2interfaces %}
+            <option>{{ interface }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="n2i2">Select Second Interface</label>
+        <select id="n2i2" name="n2i2" class="form-control">
+            {% for interface in n2interfaces %}
+            <option>{{ interface }}</option>
+            {% endfor %}
+        </select>
+
+    </section>
+
+    <h3>ACI Migration Leaves</h3>
+    <section>
+        <!--Select two leaves-->
+        <label for="leaves">Select Migration Leaves(2 max)</label>
+        <select multiple id="leaves" name="leaves" class="form-control">
+            {% for switch in aci_switch_list %}
+            <option>{{ switch }}</option>
+            {% endfor %}
+        </select>
+
+        <!--this piece of shit keeps refreshing the page-->
+        <!--<button href="javascript:void(0)" onclick="getSelectValues(document.getElementById('leaves'));">-->
+            <!--Display selected leaves-->
+        <!--</button>-->
+
+        <!--works-->
+        <!--<a href="#" onclick="getSelectValues(document.getElementById('leaves'));">Display Selected Leaves</a>-->
 
 
-<form action="/migrate" method="POST">
-    {{ form.csrf_token }}
-    {{ form.tenant_name.label }} {{ form.tenant_name(size=20) }}<br>
-    {{ form.app_name.label }} {{ form.app_name(size=20) }}<br>
-    {{ form.layer3.label }} {{ form.layer3(size=20) }}<br>
 
-    <h1>Select the interfaces used between the ACI Fabric and Nexus switches</h1>
-    <h2>Nexus 1</h2>
-    <select name="n1i1">
-        {% for interface in n1interfaces %}
-        <option value = "{{ interface }}">{{ interface }}</option>
-        {% endfor %}
-    </select>
-    <select name="n1i2">
-        {% for interface in n1interfaces %}
-        <option value = "{{ interface }}">{{ interface }}</option>
-        {% endfor %}
-    </select>
-    <h2>Nexus 2</h2>
-    <select name="n2i1">
-        {% for interface in n2interfaces %}
-        <option value = "{{ interface }}">{{ interface }}</option>
-        {% endfor %}
-    </select>
-    <select name="n2i2">
-        {% for interface in n2interfaces %}
-        <option value = "{{ interface }}">{{ interface }}</option>
-        {% endfor %}
-    </select>
 
-    <br>
-    {% for switch in aci_switch_list %}
-    <h2>{{ switch }}</h2>
-    <select>
-        {% for interface in aci_switch_list[switch] %}
-        <option value="{{interface}}">{{interface}}</option>
-        {% endfor %}
-    </select>
-    <select>
-        {% for interface in aci_switch_list[switch] %}
-        <option value="{{interface}}">{{interface}}</option>
-        {% endfor %}
-    </select>
-    {% endfor %}
-    <br><button type="submit" class="btn btn-primary btn-lg">Migrate</button>
+    </section>
+
+    <h3>Select Leaf Interfaces</h3>
+    <section>
+         <div id="selected-leaves">
+            <!--Generate div for each switch, only selected switches should be visible-->
+            {% for switch in aci_switch_list %}
+            <div id="{{ switch }}" style="display: none;">
+
+                <h2>{{ switch }}</h2>
+                <select>
+                    {% for interface in aci_switch_list[switch] %}
+                    <option value="{{interface}}">{{interface}}</option>
+                    {% endfor %}
+                </select>
+                interface two
+                <select>
+                    {% for interface in aci_switch_list[switch] %}
+                    <option value="{{interface}}">{{interface}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endfor %}
+
+        </div>
+    </section>
+
 
 </form>
+
+<script>
+
+    function getSelectValues(select) {
+        var result = [];
+        var options = select && select.options;
+        var opt;
+        var leafcount = 0;
+
+        for (var i = 0, iLen = options.length; i < iLen; i++) {
+            opt = options[i];
+
+            if (opt.selected) {
+                leafcount++
+                document.getElementById(opt.text).style.display = "block";
+
+            }
+            else {
+                document.getElementById(opt.text).style.display = "none";
+            }
+        }
+        console.log(leafcount)
+        return leafcount
+    }
+
+    $("#migration-wizard-phase2").steps({
+        headerTag: "h3",
+        bodyTag: "section",
+        transitionEffect: "slideLeft",
+        stepsOrientation: "vertical",
+
+        onStepChanging: function (event, currentIndex)
+        {
+            if (currentIndex == 5) {
+                // always make sure there are only two active selections
+                if  (getSelectValues(document.getElementById('leaves')) != 2) {
+                    alert("Please select exactly two leaf switches")
+                    return false;
+                } else {
+                    return true;
+                }
+
+
+            } else {
+//            all other tabs should always move one
+                return true
+            }
+            },
+
+        onFinished: function (event, currentIndex)
+        {
+            var form = $(this);
+
+            // Submit form input
+            form.submit();
+        }
+    }).validate({
+        errorPlacement: function (error, element)
+        {
+            element.before(error);
+        },
+        rules: {
+            confirm: {
+                equalTo: "#password"
+            }
+        }
+    });
+
+</script>
 
 
 {% endblock %}

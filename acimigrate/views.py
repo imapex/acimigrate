@@ -74,10 +74,13 @@ def updateconfig():
             aci_switch_dict[aci_switch.name] = int_list
 
     #print aci_switch_dict
-    return render_template('phase2.html', data=nexus.migration_dict()['vlans'], form=form,
-                           n1interfaces=nexus.free_interfaces(), n2interfaces=nexus2.free_interfaces(),
-                           aci_switch_list=aci_switch_dict)
-
+    return render_template('phase2.html',
+                           data=nexus.migration_dict()['vlans'],
+                           form=form,
+                           n1interfaces=nexus.free_interfaces(),
+                           n2interfaces=nexus2.free_interfaces(),
+                           aci_switch_list=aci_switch_dict,
+                           )
 
 @app.route("/migrate", methods=('GET','POST'))
 def domigrate():
@@ -89,15 +92,18 @@ def domigrate():
         l3 = False
     TENANT_NAME = request.form['tenant_name']
     APP_NAME = request.form['app_name']
-
+    # Get Nexus 1 interfaces from form
     n1i1 = request.form['n1i1']
     n1i2 = request.form['n1i2']
     n1_int_list = [n1i1, n1i2]
 
-
+    # Get Nexus 2 interfaces from form
     n2i1 = request.form['n2i1']
     n2i2 = request.form['n2i2']
     n2_int_list = [n2i1, n2i2]
+
+    # Get ACI interfaces from form
+
 
     #TODO - remove repetes from n1_int_list and n2_int_list
 
