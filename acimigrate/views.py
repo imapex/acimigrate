@@ -3,7 +3,6 @@ from functools import wraps
 from flask import render_template, request, redirect
 from forms import ConfigureForm, MigrationForm
 from acimigrate import app
-import acitoolkit.acitoolkit as aci
 from acimigrate.Devices import Nexus, APIC
 from tasks import migrate
 import logging
@@ -15,6 +14,7 @@ configured = False
 apic = None
 nexus = None
 nexus2 = None
+
 
 @app.route("/setup", methods=('GET', 'POST'))
 def setup():
@@ -40,9 +40,9 @@ def index():
 
 @app.route("/doconfigure", methods=('GET', 'POST'))
 def updateconfig():
-    global apic, nexus, nexus2
+    global apic, nexus, nexus2, configured
     form = MigrationForm()
-    args = {}
+    args = dict()
     args['apic_hostname'] = request.form['apic_hostname']
     args['apic_username'] = request.form['apic_username']
     args['apic_password'] = request.form['apic_password']
@@ -56,13 +56,19 @@ def updateconfig():
     args['nexus2_username'] = request.form['nexus2_username']
     args['nexus2_password'] = request.form['nexus2_password']
 
-    nexus = Nexus(args['nexus_hostname'], args['nexus_username'], args['nexus_password'])
-    nexus2 = Nexus(args['nexus2_hostname'], args['nexus2_username'], args['nexus2_password'])
-    apic = APIC(args['apic_url'], args['apic_username'], args['apic_password'])
+    # Get credentials from form
+    nexus = Nexus(args['nexus_hostname'],
+                  args['nexus_username'],
+                  args['nexus_password'])
+    nexus2 = Nexus(args['nexus2_hostname'],
+                   args['nexus2_username'],
+                   args['nexus2_password'])
+    apic = APIC(args['apic_url'],
+                args['apic_username'],
+                args['apic_password'])
     configured = True
 
-
-    #TODO - move below to a function somewhere else
+    # TODO - move below to a function somewhere else
     aci_switch_dict = {}
     aci_switches = apic.list_switches()
     for aci_switch in aci_switches:
@@ -73,7 +79,7 @@ def updateconfig():
                 int_list.append(int.attributes['id'])
             aci_switch_dict[aci_switch.name] = int_list
 
-    #print aci_switch_dict
+    # print aci_switch_dict
     return render_template('phase2.html',
                            data=nexus.migration_dict()['vlans'],
                            form=form,
@@ -82,7 +88,8 @@ def updateconfig():
                            aci_switch_list=aci_switch_dict,
                            )
 
-@app.route("/migrate", methods=('GET','POST'))
+
+@app.route("/migrate", methods=('GET', 'POST'))
 def domigrate():
     global nexus, apic, nexus2
     print request.form
@@ -101,12 +108,14 @@ def domigrate():
     n2i1 = request.form['n2i1']
     n2i2 = request.form['n2i2']
     n2_int_list = [n2i1, n2i2]
-
-    # Get ACI interfaces from form
-
-
-    #TODO - remove repetes from n1_int_list and n2_int_list
-
+    # TODO - remove repetes from n1_int_list and n2_int_list
+    # TODO - need to add ACI interfaces from for and pass to migration function
     apic.migration_tenant(TENANT_NAME, APP_NAME)
-    result = migrate(nexus, apic, nexus2, auto=True, layer3=l3, n1_int_list=n1_int_list, n2_int_list=n2_int_list)
+    result = migrate(nexus,
+                     apic,
+                     nexus2,
+                     auto=True,
+                     layer3=l3,
+                     n1_int_list=n1_int_list,
+                     n2_int_list=n2_int_list)
     return render_template('completed.html', data=result)

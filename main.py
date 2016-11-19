@@ -1,5 +1,3 @@
-__author__ = 'kecorbin'
-import logging
 from acimigrate import app
 
 app.secret_key = '1234'

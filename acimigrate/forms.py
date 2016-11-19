@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 from flask_wtf import Form
-from wtforms import StringField, SelectField, PasswordField, BooleanField
-from wtforms.validators import DataRequired
+from wtforms import StringField, PasswordField, BooleanField
 import logging
 
 logger = logging.getLogger(__name__)
 logger.info('Loading Forms')
 
-# class EPGForm(Form):
-#     epg1 = SelectField('EPG1')
-#     epg2 = SelectField('EPG2')
 
 class ConfigureForm(Form):
     apic_hostname = StringField('Hostname')
@@ -21,6 +17,7 @@ class ConfigureForm(Form):
     nexus2_hostname = StringField('Hostname')
     nexus2_username = StringField('Username')
     nexus2_password = PasswordField('Password')
+
 
 class MigrationForm(Form):
     tenant_name = StringField('tenant')

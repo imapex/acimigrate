@@ -9,7 +9,8 @@ fh = logging.FileHandler('acimigrate.log')
 fh.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
 ch.setLevel(logging.ERROR)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter('%(asctime)s - %(name)s - '
+                              '%(levelname)s - %(message)s')
 fh.setFormatter(formatter)
 ch.setFormatter(formatter)
 logger.addHandler(fh)
@@ -21,5 +22,5 @@ logger.critical('*' * 25)
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 
-import views
-import forms
+import views  # noqa
+import forms  # noqa
