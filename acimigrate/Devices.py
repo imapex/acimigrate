@@ -4,7 +4,7 @@ from ncclient import manager
 import acitoolkit.acitoolkit as aci
 from acitoolkit import Node
 
-
+VLAN_POOL_NAME = 'acimigrate-vlan-pool'
 class APIC(object):
     """
     Class used for creating a connection to ACI fabric
@@ -23,20 +23,64 @@ class APIC(object):
         self.contract = None
         self.fabric_interfaces = aci.Interface.get(self.session)
 
-    def migration_vlan_pool(self, vlan=None):
-        topMo = cobra.model.infra("")
-        fvnsVlanInstP = cobra.model.fvns.VlanInstP(topMo, name=self.physdom+'-pool', allocMode=u'static')
-        raise NotImplemented
+    def migration_vlan_pool(self, vlans=None):
+        """
+        "Creates a VLAN pool based on a list of vlans"
+        :param vlans:
+        :return:
+        """
+        print "creating vlan pool for list {}".format(vlans)
+        pool_json = {"fvnsVlanInstP":
+                             {"attributes":
+                                  {"dn":"uni/infra/vlanns-[{}]-static".format(VLAN_POOL_NAME),
+                                   "name":"{}".format(VLAN_POOL_NAME),
+                                   }
+                              }
+                         }
+        resp = self.session.push_to_apic('/api/mo/uni/infra.json', pool_json)
 
-    def migration_physdom(self, domain_name):
+        # Add each individual vlan to the newly created pool
+        for v in vlans:
+            add_block = {"fvnsEncapBlk":
+                             {"attributes":{"allocMode":"inherit",
+                                            "descr":"",
+                                            "from":"vlan-{}".format(v),
+                                            "name":"",
+                                            "to":"vlan-{}".format(v)}}}
+            pool_dn = 'uni/infra/vlanns-[{}]-static'.format(VLAN_POOL_NAME)
+            pool_uri = '/api/mo/{}.json'.format(pool_dn)
+            resp = self.session.push_to_apic(pool_uri,
+                                             add_block)
+            print resp.text
+            print "Adding VLAN {} to VLAN Pool: {}".format(v, resp.ok)
+            return pool_dn
+
+
+    def migration_physdom(self, domain_name, vlans):
+        """
+        Create a physdom for migration connectivity
+        :param domain_name:
+        :param vlans:
+        :return:
+        """
         self.physdom = domain_name
-        topMo = cobra.model.pol.Uni("")
-        physDomP = cobra.model.phys.DomP(topMo, name=domain_name)
-        infraRsVlanNs = cobra.model.infra.RsVlanNs(physDomP, tDn=u'uni/infra/vlanns-[{}-pool]-static'.format(domain_name))
-        raise NotImplemented
+        pool_dn = self.migration_vlan_pool(vlans=vlans)
+        dom_json = {"physDomP":
+                        {"attributes":
+                             {"dn":"uni/phys-{}".format(self.physdom),
+                              "name": self.physdom
+                              },
+                         "children":[{"infraRsVlanNs":
+                                          {"attributes":{
+                                              "tDn":"{}".format(pool_dn),
+                                              "status":"created"},"children":[]}}]}}
+        print "Creating Physical Domain"
+        resp = self.session.push_to_apic('/api/mo/uni.json', dom_json)
+        print resp.text
 
     def migration_tenant(self, tenant_name, app_name, provision=True):
         self.tenant = aci.Tenant(tenant_name)
+        print self.tenant.get_url()
         self.app = aci.AppProfile(app_name, self.tenant)
         self.context = aci.Context('default', self.tenant)
 
@@ -53,8 +97,8 @@ class APIC(object):
         return self.tenant
 
     def add_physdom(self, epg):
-
-        attach_dom = {"fvRsDomAtt":{"attributes":{"tDn":"uni/phys-StaticPhyDomain",  ## change tDn to match your physdom
+        print dir(epg)
+        attach_dom = {"fvRsDomAtt":{"attributes":{"tDn":"uni/phys-{}".format(self.physdom),
                                                   "status":"created"}}}
         return attach_dom
 
@@ -78,12 +122,19 @@ class APIC(object):
         epg.add_bd(bd)
         epg.provide(self.contract)
         epg.consume(self.contract)
+
+        # Attach physdom
+        dom = aci.EPGDomain('acimigrate', epg)
+        dom.tDn = 'uni/phys-{}'.format(self.physdom)
+
         if provision:
             resp = self.session.push_to_apic(self.tenant.get_url(), self.tenant.get_json())
+            print resp.text
+
         else:
             print self.tenant.get_json()
 
-        # TODO: attach domain to EPG
+
         # TODO: add static path binding
         return resp
 

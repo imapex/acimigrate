@@ -43,6 +43,7 @@ def updateconfig():
     global apic, nexus, nexus2, configured
     form = MigrationForm()
     args = dict()
+    print request.form
     args['apic_hostname'] = request.form['apic_hostname']
     args['apic_username'] = request.form['apic_username']
     args['apic_password'] = request.form['apic_password']
@@ -110,6 +111,17 @@ def domigrate():
     n2_int_list = [n2i1, n2i2]
     # TODO - remove repetes from n1_int_list and n2_int_list
     # TODO - need to add ACI interfaces from for and pass to migration function
+    leafs = request.form.getlist('leaves')
+    print leafs
+    aci_interface_dict = {}
+    for leaf in leafs:
+        int1 = request.form.getlist('{}-int1'.format(leaf))
+        int2 = request.form.getlist('{}-int2'.format(leaf))
+        aci_interface_dict[leaf] = [int1, int2]
+
+
+    print "aci inteface dict {}".format(aci_interface_dict)
+
     apic.migration_tenant(TENANT_NAME, APP_NAME)
     result = migrate(nexus,
                      apic,
@@ -117,5 +129,7 @@ def domigrate():
                      auto=True,
                      layer3=l3,
                      n1_int_list=n1_int_list,
-                     n2_int_list=n2_int_list)
+                     n2_int_list=n2_int_list,
+                     aci_interface_dict=aci_interface_dict
+                     )
     return render_template('completed.html', data=result)

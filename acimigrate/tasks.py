@@ -9,8 +9,11 @@ logger.info('Loading Tasks')
 
 def migrate(nx, apic, nx2, auto=True,
             layer3=False, n1_int_list=None,
-            n2_int_list=None):
+            n2_int_list=None,
+            aci_interface_dict=None):
+
     full_migration_dict = nx.migration_dict()
+
     # TODO - Test not using nx1pc_list,
     # but use nx.pc_list() directly in below while statement
     nx1pc_list = nx.pc_list()
@@ -24,6 +27,10 @@ def migrate(nx, apic, nx2, auto=True,
     print migration_dict
     print "********"
     result = {}
+    # Create a physical domain and VLAN pool for all the vlans
+    vlan_list = migration_dict.keys()
+    apic.migration_physdom('acimigrate', vlan_list)
+
     for v in migration_dict.keys():
         name = migration_dict[v]['name']
         hsrp = migration_dict[v]['hsrp']

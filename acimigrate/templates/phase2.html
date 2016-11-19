@@ -134,13 +134,15 @@
             <div id="{{ switch }}" style="display: none;">
 
                 <h2>{{ switch }}</h2>
-                <select>
+                <label for="{{switch}}-int1">Select Second Interface</label>
+                <select id="{{switch}}-int1" name="{{switch}}-int1" class="form-control">
                     {% for interface in aci_switch_list[switch] %}
                     <option value="{{interface}}">{{interface}}</option>
                     {% endfor %}
                 </select>
-                interface two
-                <select>
+                Second Interface
+                <label for="{{switch}}-int2">Select Second Interface</label>
+                <select id="{{switch}}-int2" name="{{switch}}-int2" class="form-control">
                     {% for interface in aci_switch_list[switch] %}
                     <option value="{{interface}}">{{interface}}</option>
                     {% endfor %}
