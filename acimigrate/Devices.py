@@ -5,6 +5,8 @@ import acitoolkit.acitoolkit as aci
 from acitoolkit import Node
 
 VLAN_POOL_NAME = 'acimigrate-vlan-pool'
+
+
 class APIC(object):
     """
     Class used for creating a connection to ACI fabric
@@ -31,22 +33,22 @@ class APIC(object):
         """
         print "creating vlan pool for list {}".format(vlans)
         pool_json = {"fvnsVlanInstP":
-                             {"attributes":
-                                  {"dn":"uni/infra/vlanns-[{}]-static".format(VLAN_POOL_NAME),
-                                   "name":"{}".format(VLAN_POOL_NAME),
-                                   }
-                              }
-                         }
+                         {"attributes":
+                              {"dn": "uni/infra/vlanns-[{}]-static".format(VLAN_POOL_NAME),
+                               "name": "{}".format(VLAN_POOL_NAME),
+                               }
+                          }
+                     }
         resp = self.session.push_to_apic('/api/mo/uni/infra.json', pool_json)
 
         # Add each individual vlan to the newly created pool
         for v in vlans:
             add_block = {"fvnsEncapBlk":
-                             {"attributes":{"allocMode":"inherit",
-                                            "descr":"",
-                                            "from":"vlan-{}".format(v),
-                                            "name":"",
-                                            "to":"vlan-{}".format(v)}}}
+                             {"attributes": {"allocMode": "inherit",
+                                             "descr": "",
+                                             "from": "vlan-{}".format(v),
+                                             "name": "",
+                                             "to": "vlan-{}".format(v)}}}
             pool_dn = 'uni/infra/vlanns-[{}]-static'.format(VLAN_POOL_NAME)
             pool_uri = '/api/mo/{}.json'.format(pool_dn)
             resp = self.session.push_to_apic(pool_uri,
@@ -54,7 +56,6 @@ class APIC(object):
             print resp.text
             print "Adding VLAN {} to VLAN Pool: {}".format(v, resp.ok)
             return pool_dn
-
 
     def migration_physdom(self, domain_name, vlans):
         """
@@ -67,13 +68,13 @@ class APIC(object):
         pool_dn = self.migration_vlan_pool(vlans=vlans)
         dom_json = {"physDomP":
                         {"attributes":
-                             {"dn":"uni/phys-{}".format(self.physdom),
+                             {"dn": "uni/phys-{}".format(self.physdom),
                               "name": self.physdom
                               },
-                         "children":[{"infraRsVlanNs":
-                                          {"attributes":{
-                                              "tDn":"{}".format(pool_dn),
-                                              "status":"created"},"children":[]}}]}}
+                         "children": [{"infraRsVlanNs":
+                             {"attributes": {
+                                 "tDn": "{}".format(pool_dn),
+                                 "status": "created"}, "children": []}}]}}
         print "Creating Physical Domain"
         resp = self.session.push_to_apic('/api/mo/uni.json', dom_json)
         print resp.text
@@ -95,12 +96,6 @@ class APIC(object):
         else:
             self.tenant.get_json()
         return self.tenant
-
-    def add_physdom(self, epg):
-        print dir(epg)
-        attach_dom = {"fvRsDomAtt":{"attributes":{"tDn":"uni/phys-{}".format(self.physdom),
-                                                  "status":"created"}}}
-        return attach_dom
 
     def create_epg_for_vlan(self, vlan, mac_address=None, net=None, provision=True):
         epg = aci.EPG(vlan, self.app)
@@ -134,7 +129,6 @@ class APIC(object):
         else:
             print self.tenant.get_json()
 
-
         # TODO: add static path binding
         return resp
 
@@ -160,6 +154,7 @@ class Nexus(object):
     Class for gleaning useful information from an NX-OS device
 
     """
+
     def __init__(self, host, user, passwd):
         self.host = host
         self.user = user
@@ -177,8 +172,6 @@ class Nexus(object):
                                        device_params={'name': 'nexus'},
                                        allow_agent=False,
                                        look_for_keys=False)
-
-
 
     cmd_default_int_snippet = """
         <default>
@@ -208,7 +201,6 @@ class Nexus(object):
             </vpc>
         """
 
-
     exec_conf_prefix = """
       <config xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0">
         <configure xmlns="http://www.cisco.com/nxos:1.0:vlan_mgr_cli">
@@ -221,7 +213,7 @@ class Nexus(object):
           </config>
             """
 
-    cmd_vlan_conf_snippet= """
+    cmd_vlan_conf_snippet = """
                 <vlan>
                   <vlan-id-create-delete>
                     <__XML__PARAM_value>%s</__XML__PARAM_value>
@@ -277,6 +269,7 @@ class Nexus(object):
             </configure>
           </config>
     """
+
     cmd_vlan_common = """
                 <switchport>
                   <trunk>
@@ -304,13 +297,12 @@ class Nexus(object):
           </interface>
     """
 
-    filter_show_vlan_brief_snippet =  """
+    filter_show_vlan_brief_snippet = """
           <show xmlns="http://www.cisco.com/nxos:1.0:vlan_mgr_cli">
             <vlan>
               <brief/>
             </vlan>
           </show> """
-
 
     @staticmethod
     def format_mac_address(mac):
@@ -351,7 +343,7 @@ class Nexus(object):
                         interface = int.find('groups:port', pc_ns_map).text
                         member_list.append(interface)
                 pc_dict[portchannel] = member_list
-        #print pc_dict
+        # print pc_dict
         return pc_dict
 
     @property
@@ -375,7 +367,6 @@ class Nexus(object):
         vpc_dict["vpc_list"] = vpc_id_list
         print vpc_dict
         return vpc_dict
-
 
     @property
     def phy_interface_dict(self):
@@ -453,11 +444,11 @@ class Nexus(object):
                     count = 0
                     for sec in secondaries.iter():
                         count = count + 1
-                        #print count
-                        #print sec
+                        # print count
+                        # print sec
                         rows = sec.getchildren()
                         for row in rows:
-                            #print row.attrib
+                            # print row.attrib
                             subnetx = row.find('groups:subnet' + str(count), svi_ns_map)
                             if subnetx is not None:
                                 subnetx = subnetx.text
@@ -467,10 +458,9 @@ class Nexus(object):
                                 maskx = maskx.text
                                 mask_list.append(maskx)
 
-                svi_dict[intf] = {'subnets' : subnet_list, 'masks' : mask_list}
-        #print "svi_dict: " , svi_dict
+                svi_dict[intf] = {'subnets': subnet_list, 'masks': mask_list}
+        # print "svi_dict: " , svi_dict
         return svi_dict
-
 
     @property
     def hsrp_dict(self):
@@ -507,8 +497,6 @@ class Nexus(object):
                                    'vips': vip_list}
         return hsrp_dict
 
-
-
     def enable_vlan(self, vlanid, vlanname):
         confstr = self.cmd_vlan_conf_snippet % (vlanid, vlanname)
         confstr = self.exec_conf_prefix + confstr + self.exec_conf_postfix
@@ -536,20 +524,17 @@ class Nexus(object):
         print confstr
         self.manager.edit_config(target='running', config=confstr)
 
-
-
     def build_xml(self, cmd):
         args = cmd.split(' ')
         xml = ""
         for a in reversed(args):
-            xml = """<%s>%s</%s>""" % (a,xml,a)
+            xml = """<%s>%s</%s>""" % (a, xml, a)
         return xml
 
     def run_cmd(self, cmd):
         xml = self.build_xml(cmd)
         ncdata = str(self.manager.get(('subtree', xml)))
         return ncdata
-
 
     def migration_dict(self):
         """
@@ -565,9 +550,9 @@ class Nexus(object):
                 migrate_dict['vlans'][v]['hsrp'].update(self.svi_dict['Vlan{0}'.format(v)])
             else:
                 migrate_dict['vlans'][v]['hsrp'] = None
-        #migrate_dict['interfaces'] = self.free_interfaces()
-        #print self.port_channel_dict
-        #print self.free_interfaces()
+        # migrate_dict['interfaces'] = self.free_interfaces()
+        # print self.port_channel_dict
+        # print self.free_interfaces()
         return migrate_dict
 
     def pc_list(self):
@@ -587,11 +572,11 @@ class Nexus(object):
             for int in self.port_channel_dict[pc]:
                 used_int_list.append(int)
 
-        #print used_int_list
+        # print used_int_list
 
         free_int_list = [x for x in self.phy_interface_dict if x not in used_int_list]
-        #free_int_list = set(self.phy_interface_dict) - set(used_int_list)
-        #print free_int_list
+        # free_int_list = set(self.phy_interface_dict) - set(used_int_list)
+        # print free_int_list
         return free_int_list
 
     def cdp_neighbors(self):
@@ -626,14 +611,12 @@ class Nexus(object):
 
             confstr = default + port_config
             confstr = self.exec_conf_prefix + confstr + self.exec_conf_postfix
-            #print confstr
+            # print confstr
             self.manager.edit_config(target='running', config=confstr)
-
 
         confstr = self.cmd_config_vpc_member % (pc, pc)
         confstr = self.exec_conf_prefix + confstr + self.exec_conf_postfix
         self.manager.edit_config(target='running', config=confstr)
-
 
         status = True
         return status
