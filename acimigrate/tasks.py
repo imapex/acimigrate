@@ -9,8 +9,10 @@ logger.info('Loading Tasks')
 
 def migrate(nx, apic, nx2, auto=True,
             layer3=False, n1_int_list=None,
-            n2_int_list=None):
+            n2_int_list=None,
+            aci_interface_dict=None):
 
+    apic.apic_migration_dict = aci_interface_dict
     full_migration_dict = nx.migration_dict()
 
     # TODO - Test not using nx1pc_list,
@@ -19,9 +21,11 @@ def migrate(nx, apic, nx2, auto=True,
     migration_dict = full_migration_dict['vlans']
     nx1pc = random.randrange(1, 4096)
     nx2pc = nx1pc
+
     # TODO - Test for condition in nx2, and re-run until both nx1pc and nx2pc are valid
     while not(nx1pc not in nx.vpc_dict["vpc_list"] and nx1pc not in nx1pc_list):
         nx1pc = random.randrange(1, 4096)
+
     print "********"
     print migration_dict
     print "********"
@@ -33,11 +37,17 @@ def migrate(nx, apic, nx2, auto=True,
     # Create Node Profiles
 
 
+    print "Creating VPC Policy Group for migration interfaces"
+    print apic.create_vpc_policy_group('vpc-migration-test')
+    print "Creating Interface Selectors for migration interfaces"
+    print apic.create_interface_selector()
+
+
     for v in migration_dict.keys():
         name = migration_dict[v]['name']
         hsrp = migration_dict[v]['hsrp']
         if auto:
-            tenant = apic.create_epg_for_vlan(name)
+            tenant = apic.create_epg_for_vlan(name, v)
             if tenant.ok:
                 logger.info('Created EPG for vlan {}'.format(name))
                 print 'Created EPG for vlan {}'.format(name)
@@ -56,6 +66,7 @@ def migrate(nx, apic, nx2, auto=True,
                         else:
                             mask = "24"
                         tenant = apic.create_epg_for_vlan(name,
+                                                          v,
                                                           mac_address=hsrp['vmac'],
                                                           net=vip+'/'+mask)
                         count = count + 1

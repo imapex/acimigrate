@@ -18,16 +18,18 @@ def commit(md, obj):
     c.addMo(obj)
     return md.commit(c)
 
+
 def create_10G_link_policy(md, name):
-    topMo = md.lookupByDn('uni/infra')
-    fabricHIfPol = cobra.model.fabric.HIfPol(topMo,
-                                             ownerKey=u'',
-                                             name=name,
-                                             descr=u'',
-                                             ownerTag=u'',
-                                             autoNeg=u'on',
-                                             speed=u'10G',
-                                             linkDebounce=u'100')
+    obj = {"fabricHIfPol":{"attributes":
+                               {"autoNeg":"on",
+                                "descr":"",
+                                "dn":"uni/infra/hintfpol-{}".format(name),
+                                "fecMode":"inherit",
+                                "linkDebounce":"100",
+                                "name":"{}".format(name),
+                                "nameAlias":"",
+                                "speed":"10G"}}}
+
     return commit(md, topMo)
 
 
@@ -74,5 +76,5 @@ md = cobra.mit.access.MoDirectory(ls)
 md.login()
 
 create_10G_link_policy(md, 'foo-link')
-create_cdp_policy(md, 'foo-cdp')
-create_lacp_policy(md, 'foo-lacp')
+#create_cdp_policy(md, 'foo-cdp')
+#create_lacp_policy(md, 'foo-lacp')

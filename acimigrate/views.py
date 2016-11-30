@@ -132,5 +132,6 @@ def domigrate():
                      # TODO Nexus Interface lists should be attached to Nx object??
                      n1_int_list=n1_int_list,
                      n2_int_list=n2_int_list,
+                     aci_interface_dict=aci_interface_dict
                      )
     return render_template('completed.html', data=result)
