@@ -38,32 +38,37 @@ class APIC(object):
         :return:
         """
         print "creating vlan pool for list {}".format(vlans)
+
         # Initialize a list of fvnsEncapBlk
         children = []
-        for v in vlans:
 
-            obj = {"fvnsEncapBlk":{
+        # construct an encap block for each VLAN
+        for v in vlans:
+            obj = {"fvnsEncapBlk": {
                 "attributes":
-                    {"allocMode":"inherit",
-                     "descr":"",
-                     "from":"vlan-{0}".format(v),
-                     "name":"vlan-{0}".format(v),
-                     "nameAlias":"",
-                     "to":"vlan-{}".format(v)}}}
+                    {"allocMode": "inherit",
+                     "descr": "",
+                     "from": "vlan-{0}".format(v),
+                     "name": "vlan-{0}".format(v),
+                     "nameAlias": "",
+                     "to": "vlan-{}".format(v)}}}
             children.append(obj)
 
+        # construct vlan pool
         obj = {"fvnsVlanInstP":
                    {"attributes":
-                        {"allocMode":"static",
-                         "descr":"",
-                         "dn":"uni/infra/vlanns-[{}]-static".format(VLAN_POOL_NAME),
-                         "name":"{}".format(VLAN_POOL_NAME),
-                         },"children": children
+                        {"allocMode": "static",
+                         "descr": "",
+                         "dn": "uni/infra/vlanns-[{}]-static".format(VLAN_POOL_NAME),
+                         "name": "{}".format(VLAN_POOL_NAME),
+                         }, "children": children
                     }
                }
 
+        # commit vlan pool to APIC
         resp = self.session.push_to_apic('/api/mo/uni/infra.json', obj)
 
+        # return the dn of the object
         return obj['fvnsVlanInstP']['attributes']['dn']
 
     def node_id_from_name(self, name):
@@ -74,7 +79,7 @@ class APIC(object):
 
         """
         resp = self.session.get('/api/node/class/fabricNode.json?'
-                         'query-target-filter=and(eq(fabricNode.name,"{}"))'.format(name))
+                                'query-target-filter=and(eq(fabricNode.name,"{}"))'.format(name))
 
         return resp.json()['imdata'][0]['fabricNode']['attributes']['id']
 
@@ -87,29 +92,28 @@ class APIC(object):
         """
         node_id = self.node_id_from_name(switchname)
 
-
         self.migration_leaves.append(node_id)
         node_prof_json = {"infraNodeP":
                               {"attributes":
-                                   {"dn":"uni/infra/nprof-{}".format(switchname),
+                                   {"dn": "uni/infra/nprof-{}".format(switchname),
                                     "name": switchname,
-                                    "rn":"nprof-{}".format(switchname)},
-                               "children":[
-                                   {"infraRsAccPortP":{"attributes":{"tDn": selector}}},
+                                    "rn": "nprof-{}".format(switchname)},
+                               "children": [
+                                   {"infraRsAccPortP": {"attributes": {"tDn": selector}}},
                                    {"infraLeafS":
                                         {"attributes":
-                                             {"dn":"uni/infra/nprof-{0}/leaves-{0}-typ-range".format(switchname),
-                                              "type":"range",
+                                             {"dn": "uni/infra/nprof-{0}/leaves-{0}-typ-range".format(switchname),
+                                              "type": "range",
                                               "name": switchname
                                               },
-                                         "children":[
+                                         "children": [
                                              {"infraNodeBlk":
                                                   {"attributes":
-                                                       {"dn":"uni/infra/nprof-{0}/"
-                                                             "leaves-{0}-typ-range/nodeblk-{0}".format(switchname),
+                                                       {"dn": "uni/infra/nprof-{0}/"
+                                                              "leaves-{0}-typ-range/nodeblk-{0}".format(switchname),
                                                         "from_": node_id,
                                                         "to_": node_id,
-                                                        "name":switchname,
+                                                        "name": switchname,
                                                         }
                                                    }
                                               }
@@ -132,13 +136,13 @@ class APIC(object):
         infraportblk = {
             "infraPortBlk":
                 {"attributes":
-                     {
-                      "dn":"{}/hports-ints-typ-range/portblk-port{}".format(portprofdn, port),
-                      "fromPort": port,
-                      "toPort": port,
-                      "name":"port{}".format(port)
-                      }
-                 }
+                    {
+                        "dn": "{}/hports-ints-typ-range/portblk-port{}".format(portprofdn, port),
+                        "fromPort": port,
+                        "toPort": port,
+                        "name": "port{}".format(port)
+                    }
+                }
         }
         return infraportblk
 
@@ -159,12 +163,12 @@ class APIC(object):
             interface_selectors = {"infraAccPortP":
                                        {"attributes":
                                             {"dn": dn,
-                                             "name":"{}-intselector".format(switch)
+                                             "name": "{}-intselector".format(switch)
                                              },
                                         "children": [{"infraHPortS":
-                                            {"attributes":{
-                                                "name":"ints",
-                                                "type":"range"
+                                            {"attributes": {
+                                                "name": "ints",
+                                                "type": "range"
                                             }
 
                                             }
@@ -181,7 +185,7 @@ class APIC(object):
             children = [self.infraPortBlk(dn, p) for p in ports]
 
             # Also need to associate policy-group
-            policy_group = {"infraRsAccBaseGrp":{"attributes":{"tDn": self.migration_vpc_dn}}}
+            policy_group = {"infraRsAccBaseGrp": {"attributes": {"tDn": self.migration_vpc_dn}}}
             children.append(policy_group)
 
             interface_selectors['infraAccPortP']['children'][0]['infraHPortS']['children'] = children
@@ -193,50 +197,48 @@ class APIC(object):
             self.create_node_profile(switch, dn)
             print resp.text
 
-
-
     def create_10G_link_policy(self, name):
         """
         This creates the 10G link policy for later
         :param name: name for the interface-policy
         :return: str dn of the created object
         """
-        obj = {"fabricHIfPol":{"attributes":
-                                   {"autoNeg":"on",
-                                    "descr":"",
-                                    "dn":"uni/infra/hintfpol-{}".format(name),
-                                    "fecMode":"inherit",
-                                    "linkDebounce":"100",
-                                    "name":"{}".format(name),
-                                    "nameAlias":"",
-                                    "speed":"10G"}}}
+        obj = {"fabricHIfPol": {"attributes":
+                                    {"autoNeg": "on",
+                                     "descr": "",
+                                     "dn": "uni/infra/hintfpol-{}".format(name),
+                                     "fecMode": "inherit",
+                                     "linkDebounce": "100",
+                                     "name": "{}".format(name),
+                                     "nameAlias": "",
+                                     "speed": "10G"}}}
 
         resp = self.session.push_to_apic('/api/mo/uni.json', obj)
         return obj['fabricHIfPol']['attributes']['name']
 
     def create_lacp_policy(self, name):
-            obj = {"lacpLagPol":
-                       {"attributes":
-                            {"ctrl":"fast-sel-hot-stdby,graceful-conv,susp-individual",
-                             "descr":"",
-                             "dn":"uni/infra/lacplagp-{}".format(name),
-                             "maxLinks":"16",
-                             "minLinks":"1",
-                             "mode":"active",
-                             "name":"{}".format(name)
-                             }
-                        }
-                   }
-            resp = self.session.push_to_apic('/api/mo/uni.json', obj)
-            return obj['lacpLagPol']['attributes']['name']
+        obj = {"lacpLagPol":
+                   {"attributes":
+                        {"ctrl": "fast-sel-hot-stdby,graceful-conv,susp-individual",
+                         "descr": "",
+                         "dn": "uni/infra/lacplagp-{}".format(name),
+                         "maxLinks": "16",
+                         "minLinks": "1",
+                         "mode": "active",
+                         "name": "{}".format(name)
+                         }
+                    }
+               }
+        resp = self.session.push_to_apic('/api/mo/uni.json', obj)
+        return obj['lacpLagPol']['attributes']['name']
 
     def create_cdp_policies(self, name):
         obj = {"cdpIfPol":
                    {"attributes":
-                        {"adminSt":"enabled",
-                         "descr":"",
-                         "dn":"uni/infra/cdpIfP-{}".format(name),
-                         "name":"{}".format(name),
+                        {"adminSt": "enabled",
+                         "descr": "",
+                         "dn": "uni/infra/cdpIfP-{}".format(name),
+                         "name": "{}".format(name),
                          }
                     }
                }
@@ -246,11 +248,11 @@ class APIC(object):
     def create_aep(self, name):
         obj = {"infraAttEntityP":
                    {"attributes":
-                        {"descr":"",
-                         "dn":"uni/infra/attentp-{}".format(name),
-                         "name":"{}".format(name)
+                        {"descr": "",
+                         "dn": "uni/infra/attentp-{}".format(name),
+                         "name": "{}".format(name)
                          },
-                    "children":[{"infraRsDomP":{"attributes":{"tDn":"uni/phys-{}".format(self.physdom)}}}]}}
+                    "children": [{"infraRsDomP": {"attributes": {"tDn": "uni/phys-{}".format(self.physdom)}}}]}}
         print obj
         resp = self.session.push_to_apic('/api/mo/uni/infra.json', obj)
         return obj['infraAttEntityP']['attributes']['dn']
@@ -276,19 +278,24 @@ class APIC(object):
 
         obj = {"infraAccBndlGrp":
                    {"attributes":
-                        {"dn":"uni/infra/funcprof/accbundle-{}".format(name),
-                         "lagT":"node",
-                         "name":"{}".format(name)
+                        {"dn": "uni/infra/funcprof/accbundle-{}".format(name),
+                         "lagT": "node",
+                         "name": "{}".format(name)
                          },
-                    "children":[
-                        {"infraRsAttEntP":{"attributes":{"tDn": aep}}},
-                        {"infraRsCdpIfPol":{"attributes":
-                                                {"tnCdpIfPolName": cdp}}},
-                        {"infraRsHIfPol":{"attributes":
-                                              {"tnFabricHIfPolName": link}}},
-                        {"infraRsLacpPol":{"attributes":
-                                               {"tnLacpLagPolName": lacp}}},
-                        ]
+                    "children": [
+                        {"infraRsAttEntP": {"attributes": {"tDn": aep}}},
+                        {"infraRsCdpIfPol": {"attributes":
+                                                 {"tnCdpIfPolName": cdp}}},
+                        {"infraRsHIfPol":
+                             {
+                                 "attributes":
+                                     {
+                                         "tnFabricHIfPolName": link}}},
+                        {"infraRsLacpPol":
+                             {
+                                 "attributes":
+                                     {"tnLacpLagPolName": lacp}}},
+                    ]
                     }
                }
 
@@ -297,12 +304,6 @@ class APIC(object):
         self.migration_vpc_rn = name
         resp = self.session.push_to_apic('/api/mo/uni/infra/funcprof.json', obj)
         return self.migration_vpc_dn
-
-
-        # NEXT UP
-    # modify interface selector w/ policy-group
-    # modify switch selector w/ interface selectors
-
 
     def migration_physdom(self, domain_name, vlans):
         """
@@ -345,6 +346,17 @@ class APIC(object):
         return self.tenant
 
     def create_epg_for_vlan(self, name, num, mac_address=None, net=None, provision=True):
+        """
+        This creates the EPG for a given EPG, it is generally called from the main migration routine
+
+        :param name: str name for the vlan
+        :param num: str vlan id
+        :param mac_address: str
+        :param net: str
+        :param provision: bool
+        :return:
+        """
+
         epg = aci.EPG(name, self.app)
         bd = aci.BridgeDomain(name, self.tenant)
 
@@ -368,7 +380,6 @@ class APIC(object):
         dom = aci.EPGDomain('acimigrate', epg)
         dom.tDn = 'uni/phys-{}'.format(self.physdom)
 
-
         if provision:
             resp = self.session.push_to_apic(self.tenant.get_url(), self.tenant.get_json())
             print resp.text
@@ -378,10 +389,10 @@ class APIC(object):
                                                                              self.migration_leaves[1],
                                                                              self.migration_vpc_rn)
 
-            c = {"fvRsPathAtt":{"attributes":{"encap":"vlan-{}".format(num),
-                                              "tDn": protep_str,
-                                              "status":"created"},
-                                "children":[]}}
+            c = {"fvRsPathAtt": {"attributes": {"encap": "vlan-{}".format(num),
+                                                "tDn": protep_str,
+                                                "status": "created"},
+                                 "children": []}}
 
             epgurl = '/api/mo/uni/tn-{}/ap-{}/epg-{}.json'.format(self.tenant,
                                                                   self.app,
@@ -389,7 +400,7 @@ class APIC(object):
             print "Creating static path binding for {}....".format(protep_str),
 
             bindresp = self.session.push_to_apic(epgurl, c)
-            print bindresp.text
+            print bindresp.status_code
 
         else:
             print self.tenant.get_json()
@@ -446,7 +457,7 @@ class Nexus(object):
               <__XML__value>%s</__XML__value>
             </interface>
               <description>
-                  <__XML__value>testcall</__XML__value>
+                  <__XML__value>acimigrate-intf</__XML__value>
               </description>
               <__XML__value>switchport mode trunk</__XML__value>
               <__XML__value>channel-group %s mode active</__XML__value>
@@ -871,7 +882,6 @@ class Nexus(object):
 
             confstr = default + port_config
             confstr = self.exec_conf_prefix + confstr + self.exec_conf_postfix
-            # print confstr
             self.manager.edit_config(target='running', config=confstr)
 
         confstr = self.cmd_config_vpc_member % (pc, pc)
@@ -880,3 +890,4 @@ class Nexus(object):
 
         status = True
         return status
+

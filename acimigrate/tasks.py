@@ -38,7 +38,7 @@ def migrate(nx, apic, nx2, auto=True,
 
 
     print "Creating VPC Policy Group for migration interfaces"
-    print apic.create_vpc_policy_group('vpc-migration-test')
+    print apic.create_vpc_policy_group('legacy-nexus-vpc')
     print "Creating Interface Selectors for migration interfaces"
     print apic.create_interface_selector()
 
