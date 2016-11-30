@@ -123,13 +123,14 @@ def domigrate():
     print "aci inteface dict {}".format(aci_interface_dict)
 
     apic.migration_tenant(TENANT_NAME, APP_NAME)
+    apic.aci_interface_dict = aci_interface_dict
     result = migrate(nexus,
                      apic,
                      nexus2,
                      auto=True,
                      layer3=l3,
+                     # TODO Nexus Interface lists should be attached to Nx object??
                      n1_int_list=n1_int_list,
                      n2_int_list=n2_int_list,
-                     aci_interface_dict=aci_interface_dict
                      )
     return render_template('completed.html', data=result)

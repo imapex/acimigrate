@@ -9,7 +9,7 @@ VLAN_POOL_NAME = 'acimigrate-vlan-pool'
 
 class APIC(object):
     """
-    Class used for creating a connection to ACI fabric
+    Utilities used for creating a connection to ACI fabric
     """
 
     def __init__(self, url, username, password):
@@ -24,6 +24,7 @@ class APIC(object):
         self.context = None
         self.contract = None
         self.fabric_interfaces = aci.Interface.get(self.session)
+        self.apic_migration_dict = None
 
     def migration_vlan_pool(self, vlans=None):
         """
@@ -56,6 +57,138 @@ class APIC(object):
             print resp.text
             print "Adding VLAN {} to VLAN Pool: {}".format(v, resp.ok)
             return pool_dn
+
+    def node_id_from_name(self, name):
+        """
+        Returns a node id from name
+        :param name:
+        :return: node_id
+
+        """
+        resp = self.session.get('/api/node/class/fabricNode.json?'
+                         'query-target-filter=and(eq(fabricNode.name,"{}"))'.format(name))
+
+        return resp.json()['imdata'][0]['fabricNode']['attributes']['id']
+
+
+    def create_node_profile(self, switchname):
+        """
+        creates a switch profile by name
+
+        :param switchname:
+        :return:
+        """
+        node_id = self.node_id_from_name(switchname)
+        node_prof_json = {"infraNodeP":
+                              {"attributes":
+                                   {"dn":"uni/infra/nprof-{}".format(switchname),
+                                    "name": switchname,
+                                    "rn":"nprof-{}".format(switchname)},
+                               "children":[
+                                   {"infraLeafS":
+                                        {"attributes":
+                                             {"dn":"uni/infra/nprof-{0}/leaves-{0}-typ-range".format(switchname),
+                                              "type":"range",
+                                              "name": switchname
+                                              },
+                                         "children":[
+                                             {"infraNodeBlk":
+                                                  {"attributes":
+                                                       {"dn":"uni/infra/nprof-{0}/"
+                                                             "leaves-{0}-typ-range/nodeblk-{0}".format(switchname),
+                                                        "from_": node_id,
+                                                        "to_": node_id,
+                                                        "name":switchname,
+                                                        }
+                                                   }
+                                              }
+                                         ]
+                                         }
+                                    }
+                               ]
+                               }
+                          }
+        resp = self.session.push_to_apic('/api/mo/uni/infra.json', node_prof_json)
+        print resp.text
+
+    def infraPortBlk(self, portprofdn, port):
+        """
+        create infraPortBlk Json
+        :param portprofdn: dn of the portprofile
+        :param port:
+        :return:
+        """
+        infraportblk = {
+            "infraPortBlk":
+                {"attributes":
+                     {
+                      "dn":"{}/hports-ints-typ-range/portblk-port{}".format(portprofdn, port),
+                      "fromPort": port,
+                      "toPort": port,
+                      "name":"port{}".format(port)
+                      }
+                 }
+        }
+        return infraportblk
+
+    def port_num_from_name(self, name):
+        """
+        returns just port number from interface Name
+        :param name: e.g Eth1/5
+        :return: str 5
+        """
+        print name
+        return name.split('/')[1]
+
+    def create_interface_selector(self):
+        info = self.apic_migration_dict
+        # Creates Interface Selector for for each switch
+        for switch in info.keys():
+            dn = 'uni/infra/accportprof-{}-intselector'.format(switch)
+            interface_selectors = {"infraAccPortP":
+                                       {"attributes":
+                                            {"dn": dn,
+                                             "name":"{}-intselector".format(switch)
+                                             },
+                                        "children": [{"infraHPortS":
+                                            {"attributes":{
+                                                "name":"ints",
+                                                "type":"range"
+                                            }
+
+                                            }
+                                        }
+
+                                        ]
+                                        }}
+            # Here we are getting just the port number info[switch] is a list of lists, so we need to break it down
+            names = map(lambda p: p[0], info[switch])
+            print names
+            ports = [self.port_num_from_name(n) for n in names]
+            print ports
+
+            # Add portblk for each interface
+            interface_selectors['infraAccPortP']['children'][0]['infraHPortS']['children'] = [self.infraPortBlk(dn, p) for p in ports]
+
+            print interface_selectors
+            resp = self.session.push_to_apic('/api/mo/uni.json', interface_selectors)
+            print resp.text
+
+
+    # NEXT UP
+    # 1. create interface policies,
+    # create policy-group
+    # modify interface selector w/ policy-group
+    # modify switch selector w/ interface selectors
+
+    def create_interface_policies(self):
+        pass
+
+    def create_vpc_policy_group(self):
+        pass
+
+
+
 
     def migration_physdom(self, domain_name, vlans):
         """
