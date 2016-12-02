@@ -18,7 +18,7 @@ The migration high level logic is as follows
 The easiest way to use the acimigrate application is to pull the latest docker image from docker hub
 
 ```
-docker run -d -p 8000:8000 kecorbin/acimigrate
+docker run -d -p 8000:8000 imapex/acimigrate
 ```
 
 That's it!  Launch your browser and head over to [http://127.0.0.1:8000/]
